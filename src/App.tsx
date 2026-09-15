@@ -3,7 +3,7 @@ import { useEffect }                               from 'react'
 import Navbar         from './components/redesign/Navbar'
 import FooterSection  from './components/redesign/FooterSection'
 import WhatsAppButton from './components/redesign/WhatsAppButton'
-import { gtagPageView, initWhatsAppTracking } from './lib/gtag'
+import { gtagPageView, initWhatsAppTracking, initTelClickTracking } from './lib/gtag'
 
 // Pages
 import Index          from './pages/Index'
@@ -35,7 +35,7 @@ function ScrollReset() {
   const { pathname } = useLocation()
 
   // Init auto-tracking de WA una sola vez al montar la app
-  useEffect(() => { initWhatsAppTracking() }, [])
+  useEffect(() => { initWhatsAppTracking(); initTelClickTracking() }, [])
 
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
 

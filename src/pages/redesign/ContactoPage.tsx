@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { motion }   from 'framer-motion'
 import { ArrowRight, MapPin, Clock, Phone, Mail } from 'lucide-react'
 import { usePageMeta } from '../../hooks/usePageMeta'
@@ -42,8 +42,8 @@ export default function ContactoPage() {
   const INFO = [
     { icon: <MapPin className="w-4 h-4" />,  label: 'Ubicación',  value: 'Querétaro, México (atención nacional)' },
     { icon: <Clock  className="w-4 h-4" />,  label: 'Horario',    value: 'Lun – Vie 9:00 – 19:00 CST'           },
-    { icon: <Phone  className="w-4 h-4" />,  label: 'WhatsApp',   value: '+52 442 372 3972'                      },
-    { icon: <Mail   className="w-4 h-4" />,  label: 'Email',      value: 'contacto@revolution505.com'                },
+    { icon: <Phone  className="w-4 h-4" />,  label: 'Teléfono / WhatsApp', value: '+52 442 372 3972', href: 'tel:+524423723972' },
+    { icon: <Mail   className="w-4 h-4" />,  label: 'Email',      value: 'contacto@revolution505.com', href: 'mailto:contacto@revolution505.com' },
   ]
 
   return (
@@ -164,14 +164,20 @@ export default function ContactoPage() {
           >
             <div className="p-6 rounded-3xl border border-stroke/60 bg-surface/20 space-y-4">
               <p className="text-sm font-semibold text-text-primary">Información de contacto</p>
-              {INFO.map(({ icon, label, value }) => (
+              {INFO.map(({ icon, label, value, href }: { icon: ReactNode; label: string; value: string; href?: string }) => (
                 <div key={label} className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-xl bg-surface border border-stroke flex items-center justify-center text-accent flex-shrink-0 mt-0.5">
                     {icon}
                   </div>
                   <div>
                     <p className="text-[10px] text-muted uppercase tracking-wider">{label}</p>
-                    <p className="text-sm text-text-primary mt-0.5">{value}</p>
+                    {href ? (
+                      <a href={href} className="text-sm text-text-primary mt-0.5 inline-block hover:opacity-80 transition-opacity">
+                        {value}
+                      </a>
+                    ) : (
+                      <p className="text-sm text-text-primary mt-0.5">{value}</p>
+                    )}
                   </div>
                 </div>
               ))}
