@@ -1,11 +1,10 @@
+import { WA } from '../../constants/whatsapp'
 import { motion }     from 'framer-motion'
 import { ArrowRight }  from 'lucide-react'
 import ProcesoSection  from '../../components/redesign/ProcesoSection'
 import FAQSection      from '../../components/redesign/FAQSection'
 import { usePageMeta } from '../../hooks/usePageMeta'
 
-const WA = 'https://wa.me/524423723972?text=' +
-  encodeURIComponent('Hola, vi el proceso de trabajo de Revolution505 y quiero iniciar mi proyecto. ¿Podemos hablar?')
 
 const STEPS = [
   { num: '01', label: 'Briefing',    top: '15%', left: '4%',   delay: '0s',    anim: 'animate-float-up'   },
@@ -130,7 +129,7 @@ function ProcesoHero() {
           className="flex flex-wrap items-center justify-center gap-4"
         >
           <a
-            href={WA}
+            href={WA.llamada}
             target="_blank" rel="noopener noreferrer"
             className="group relative rounded-full hover:scale-105 transition-transform duration-200"
           >

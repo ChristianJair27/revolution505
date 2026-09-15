@@ -1,3 +1,4 @@
+import { waUrl } from '../../constants/whatsapp'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 import { ArrowUpRight, ArrowRight, X, Check, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -32,8 +33,6 @@ interface Project {
   featured?:   boolean
 }
 
-const WA_BASE = 'https://wa.me/524423723972?text='
-
 const PROJECTS: Project[] = [
   {
     id: 'amq', title: 'AMQ Group', subtitle: 'Corporativo + CRM', category: 'web',
@@ -48,7 +47,7 @@ const PROJECTS: Project[] = [
       { icon: '💰', label: 'Proyectos cotizados',value: '+55%'  },
       { icon: '⏱',  label: 'Tiempo de entrega', value: '18 d'  },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, vi el proyecto AMQ Group en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi el proyecto AMQ Group en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
   },
   {
     id: 'flyzz', title: 'FlyZZ Services', subtitle: 'Sistema POS + Web Corporativa', category: 'sistemas',
@@ -63,7 +62,7 @@ const PROJECTS: Project[] = [
       { icon: '🕐', label: 'Tiempo cierre caja',   value: '-80%'  },
       { icon: '📦', label: 'Diferencias inventario',value: '$0'   },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, vi el proyecto FlyZZ en el portafolio de Revolution505 y me interesa un sistema POS. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi el proyecto FlyZZ en el portafolio de Revolution505 y me interesa un sistema POS. ¿Podemos hablar?'),
   },
   {
     id: 'spartan', title: 'Spartan TV', subtitle: 'Plataforma Streaming IPTV', category: 'sistemas',
@@ -78,7 +77,7 @@ const PROJECTS: Project[] = [
       { icon: '💳', label: 'Cobros automatizados', value: '100%'  },
       { icon: '📉', label: 'Cancelaciones/mes',    value: '-60%'  },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, vi Spartan TV en el portafolio de Revolution505 y me interesa una plataforma de streaming. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi Spartan TV en el portafolio de Revolution505 y me interesa una plataforma de streaming. ¿Podemos hablar?'),
   },
   {
     id: 'pena', title: 'Peña Abogados', subtitle: 'Despacho Legal + SEO Local', category: 'seo',
@@ -93,7 +92,7 @@ const PROJECTS: Project[] = [
       { icon: '🌐', label: 'Tráfico orgánico',     value: '+220%'  },
       { icon: '⭐', label: 'Calificación Google',  value: '4.9★'   },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, vi el proyecto Peña Abogados en el portafolio y me interesa SEO para mi negocio. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi el proyecto Peña Abogados en el portafolio y me interesa SEO para mi negocio. ¿Podemos hablar?'),
   },
   {
     id: 'devilish', title: 'Devilish Store', subtitle: 'Tienda E-commerce Premium', category: 'ecommerce',
@@ -108,7 +107,7 @@ const PROJECTS: Project[] = [
       { icon: '📦', label: 'Pedidos automatizados', value: '100%'   },
       { icon: '⭐', label: 'Satisfacción cliente',  value: '4.9★'   },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, vi Devilish Store en el portafolio de Revolution505 y me interesa una tienda en línea. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi Devilish Store en el portafolio de Revolution505 y me interesa una tienda en línea. ¿Podemos hablar?'),
   },
   {
     id: 'atakgg', title: 'AtakGG', subtitle: 'Gaming Center POS', category: 'sistemas',
@@ -123,7 +122,7 @@ const PROJECTS: Project[] = [
       { icon: '⚡', label: 'Tiempo de check-in',    value: '30 seg' },
       { icon: '📊', label: 'Ingresos trackeados',   value: '100%'   },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, vi AtakGG en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi AtakGG en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
   },
   {
     id: 'nexus-dental', title: 'Nexus Dental', subtitle: 'Clínica + Reservas Online', category: 'web',
@@ -138,7 +137,7 @@ const PROJECTS: Project[] = [
       { icon: '👥', label: 'Pacientes nuevos',    value: '+55%'  },
       { icon: '⭐', label: 'Google Reviews',      value: '4.8★'  },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, vi el proyecto Nexus Dental en el portafolio y me interesa algo similar para mi clínica. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi el proyecto Nexus Dental en el portafolio y me interesa algo similar para mi clínica. ¿Podemos hablar?'),
   },
   {
     id: 'casaflex', title: 'CasaFlex Inmobiliaria', subtitle: 'Portal Inmobiliario + CRM', category: 'web',
@@ -153,7 +152,7 @@ const PROJECTS: Project[] = [
       { icon: '🤝', label: 'Cierres de ventas',      value: '+40%'  },
       { icon: '⏱',  label: 'Tiempo resp. lead',     value: '-90%'  },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, vi el proyecto CasaFlex en el portafolio de Revolution505 y me interesa un portal inmobiliario. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi el proyecto CasaFlex en el portafolio de Revolution505 y me interesa un portal inmobiliario. ¿Podemos hablar?'),
   },
   {
     id: 'lqc-pos', title: 'La Que Cura Farmacia', subtitle: 'POS + Control Medicamentos', category: 'sistemas',
@@ -168,7 +167,7 @@ const PROJECTS: Project[] = [
       { icon: '💳', label: 'Facturas CFDI',          value: '100%'   },
       { icon: '⚡', label: 'Tiempo de cobro',        value: '-70%'   },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, vi el POS para farmacia en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi el POS para farmacia en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
   },
   {
     id: 'vitae', title: 'Vitae Nutrición', subtitle: 'E-commerce + Blog Nutricional', category: 'ecommerce',
@@ -183,7 +182,7 @@ const PROJECTS: Project[] = [
       { icon: '🌐', label: 'Tráfico blog orgánico',   value: '+420%'  },
       { icon: '📱', label: 'App calculator viral',    value: '2.1K↗'  },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, vi el proyecto Vitae Nutrición en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi el proyecto Vitae Nutrición en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
   },
   {
     id: 'cielito-resto', title: 'Cielito Restaurantes', subtitle: 'Sistema Mesas + Cocina + POS', category: 'sistemas',
@@ -198,7 +197,7 @@ const PROJECTS: Project[] = [
       { icon: '📊', label: 'Errores de comanda',    value: '-98%'  },
       { icon: '💰', label: 'Ventas por sucursal',   value: '+22%'  },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, vi el sistema de restaurante en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi el sistema de restaurante en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
   },
   {
     id: 'revolution-web', title: 'Revolution505.com', subtitle: 'Nuestro Propio Sitio', category: 'web',
@@ -213,7 +212,7 @@ const PROJECTS: Project[] = [
       { icon: '🔍', label: 'Posición Google',       value: 'Top 5'   },
       { icon: '📱', label: 'Mobile Score',           value: '100/100' },
     ],
-    wa: WA_BASE + encodeURIComponent('Hola, quiero un sitio web como el de Revolution505. ¿Podemos hablar sobre mi proyecto?'),
+    wa: waUrl('Hola, quiero un sitio web como el de Revolution505. ¿Podemos hablar sobre mi proyecto?'),
   },
 ]
 
@@ -557,7 +556,7 @@ function PortafolioHero() {
           className="flex flex-wrap items-center justify-center gap-4"
         >
           <a
-            href={WA_BASE + encodeURIComponent('Hola, quiero hablar sobre un proyecto como los del portafolio de Revolution505.')}
+            href={waUrl('Hola, quiero hablar sobre un proyecto como los del portafolio de Revolution505.')}
             target="_blank" rel="noopener noreferrer"
             className="group relative rounded-full hover:scale-105 transition-transform duration-200"
           >
@@ -729,7 +728,7 @@ export default function PortafolioPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href={WA_BASE + encodeURIComponent('Hola, vi el portafolio de Revolution505 y quiero que mi proyecto aparezca ahí. ¿Podemos hablar?')}
+              href={waUrl('Hola, vi el portafolio de Revolution505 y quiero que mi proyecto aparezca ahí. ¿Podemos hablar?')}
               target="_blank" rel="noopener noreferrer"
               className="group relative rounded-full hover:scale-[1.03] active:scale-[0.98] transition-transform duration-200"
             >

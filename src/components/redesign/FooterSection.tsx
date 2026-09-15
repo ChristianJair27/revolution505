@@ -8,7 +8,7 @@ import gsap from 'gsap'
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
 
-const MARQUEE_CHUNK = 'REVOLUTION505 • TECNOLOGÍA • MICHOACÁN • DISEÑO PREMIUM • SOLUCIONES QUE CONVIERTEN • '
+const MARQUEE_CHUNK = 'REVOLUTION505 • TECNOLOGÍA • QUERÉTARO • DISEÑO PREMIUM • SOLUCIONES QUE CONVIERTEN • '
 
 // isRoute: true → use <Link to=...>, false → scroll to hash on current page
 const FOOTER_COLS = [

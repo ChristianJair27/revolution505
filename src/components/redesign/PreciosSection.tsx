@@ -102,7 +102,7 @@ const SISTEMA_PLANS: Plan[] = [
     name:     'Sistema POS',
     emoji:    '🖥',
     price:    18_000,
-    desc:     'Punto de venta para restaurantes, comercios y farmacias',
+    desc:     'POS restaurante desde $18,000 (general desde $14,000 en /sistemas)',
     delivery: '20-30 días hábiles',
     highlight: false,
     features: [

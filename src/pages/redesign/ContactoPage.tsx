@@ -41,6 +41,11 @@ export default function ContactoPage() {
     e.preventDefault()
     if (status === 'sending') return
     setError('')
+    if (!name.trim() || !email.trim() || !phone.trim() || !need.trim()) {
+      setStatus('error')
+      setError('Completa nombre, email, teléfono y qué necesitas.')
+      return
+    }
     setStatus('sending')
     const result = await submitLead({
       name: name.trim(),
@@ -141,7 +146,7 @@ export default function ContactoPage() {
                 </a>
               </div>
             ) : (
-              <form onSubmit={onSubmit} className="space-y-5" noValidate>
+              <form onSubmit={onSubmit} className="space-y-5">
                 {/* honeypot */}
                 <input
                   type="text"
@@ -223,6 +228,7 @@ export default function ContactoPage() {
                         key={s}
                         type="button"
                         onClick={() => setNeed(s)}
+                        aria-pressed={need === s}
                         className={`px-3 py-2.5 rounded-xl border text-xs text-left transition-all duration-200 ${
                           need === s
                             ? 'border-accent/60 bg-accent/10 text-text-primary'
@@ -259,7 +265,7 @@ export default function ContactoPage() {
                       </>
                     ) : (
                       <>
-                        Enviar a contacto@
+                        Enviar cotización
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                       </>
                     )}

@@ -1,10 +1,9 @@
+import { WA } from '../../constants/whatsapp'
 import { motion }       from 'framer-motion'
 import { ArrowRight }    from 'lucide-react'
 import SistemasSection   from '../../components/redesign/SistemasSection'
 import { usePageMeta }   from '../../hooks/usePageMeta'
 
-const WA = 'https://wa.me/524423723972?text=' +
-  encodeURIComponent('Hola, vi la página de Sistemas de Revolution505 y me interesa un sistema a medida. ¿Podemos hablar?')
 
 // ── Puntos de circuito para el SVG animado ──────────────────────────────────
 const CIRCUIT_PATHS = [
@@ -143,7 +142,7 @@ function SistemasHero() {
           className="flex flex-wrap items-center justify-center gap-4"
         >
           <a
-            href={WA}
+            href={WA.sistemasInfo}
             target="_blank" rel="noopener noreferrer"
             className="group relative rounded-full hover:scale-105 transition-transform duration-200"
           >
