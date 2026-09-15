@@ -37,3 +37,7 @@ Placeholders de Google Ads (WA / tel) no se tocan.
 | `src/lib/lead.ts` | Cliente fetch |
 | `src/constants/whatsapp.ts` | Textos `wa.me` + `waFromLead` |
 | `src/pages/redesign/ContactoPage.tsx` | UI formulario + WA |
+
+## Ads
+
+No se dispara `lead_form_submit` ni conversiones inventadas. Placeholders WA/tel se mantienen; conversiones Ads = ticket aparte.

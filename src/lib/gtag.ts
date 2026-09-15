@@ -8,8 +8,9 @@
 //   3. gtagCallClick()        — conversión Ads opcional en clics tel:
 //   4. gtagEvent(action, …)   — eventos genéricos personalizados
 //
-// NOTA: /contacto envía lead vía POST /api/lead.php y dispara gtagEvent('lead_form_submit').
-//       Los clics wa.me siguen yendo por initWhatsAppTracking (placeholders Ads intactos).
+// NOTA: /contacto envía lead vía POST /api/lead.php (self-hosted).
+//       NO dispares lead_form_submit de Ads hasta tener label real (ticket aparte).
+//       Los clics wa.me / tel: van por initWhatsAppTracking / initTelClickTracking.
 // ============================================================================
 
 /** ID de Google Ads — cambiar aquí si se renueva la cuenta */

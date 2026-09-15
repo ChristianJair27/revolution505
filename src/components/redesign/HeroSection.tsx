@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { WA } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import Hls from 'hls.js'
@@ -152,7 +153,7 @@ export default function HeroSection() {
 
           {/* Secondary: "Hablar por WhatsApp" — outlined with gradient border on hover */}
           <a
-            href="https://wa.me/524423723972?text=Hola%2C%20vi%20su%20p%C3%A1gina%20y%20quiero%20saber%20m%C3%A1s%20sobre%20sus%20servicios."
+            href={WA.hero}
             target="_blank"
             rel="noopener noreferrer"
             className="group relative rounded-full hover:scale-105 transition-transform duration-200"

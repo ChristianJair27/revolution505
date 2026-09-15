@@ -3,8 +3,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, CheckCircle2, Loader2, MapPin, Clock, Phone, Mail } from 'lucide-react'
 import { usePageMeta } from '../../hooks/usePageMeta'
 import { submitLead } from '../../lib/lead'
-import { waFromLead, WA_PHONE_DISPLAY, WA_PHONE_E164 } from '../../constants/whatsapp'
-import { gtagEvent } from '../../lib/gtag'
+import { waFromLead, WA_PHONE_DISPLAY, WA_PHONE_E164, CONTACT_EMAIL, CONTACT_MAILTO } from '../../constants/whatsapp'
 
 const SERVICES = [
   'Página web / Landing page',
@@ -52,7 +51,6 @@ export default function ContactoPage() {
       website: website.trim() || undefined,
     })
     if (result.ok) {
-      gtagEvent('lead_form_submit', 'Lead', need.trim() || 'contacto')
       setStatus('sent')
       return
     }
@@ -72,8 +70,8 @@ export default function ContactoPage() {
     {
       icon: <Mail className="w-4 h-4" />,
       label: 'Email',
-      value: 'contacto@revolution505.com',
-      href: 'mailto:contacto@revolution505.com',
+      value: CONTACT_EMAIL,
+      href: CONTACT_MAILTO,
     },
   ]
 
@@ -101,7 +99,7 @@ export default function ContactoPage() {
             Hablemos de tu <em className="not-italic accent-gradient-text">proyecto</em>
           </h1>
           <p className="text-sm text-muted mt-3 max-w-lg mx-auto leading-relaxed">
-            Déjanos tus datos: llegan a <strong className="text-text-primary font-medium">contacto@revolution505.com</strong>.
+            Déjanos tus datos: llegan a <strong className="text-text-primary font-medium">{CONTACT_EMAIL}</strong>.
             Después puedes seguir por WhatsApp. Respuesta en menos de 2 horas.
           </p>
         </motion.div>
@@ -120,7 +118,7 @@ export default function ContactoPage() {
                   <div>
                     <p className="text-base font-semibold text-text-primary">Mensaje enviado</p>
                     <p className="text-sm text-muted mt-1 leading-relaxed">
-                      Ya llegó a contacto@revolution505.com. Si quieres avanzar ahora, ábrenos WhatsApp
+                      Ya llegó a {CONTACT_EMAIL}. Si quieres avanzar ahora, ábrenos WhatsApp
                       con tus datos prellenados.
                     </p>
                   </div>

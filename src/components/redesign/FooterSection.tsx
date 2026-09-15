@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react'
+import { WA, CONTACT_EMAIL, CONTACT_MAILTO } from '../../constants/whatsapp'
 import { Link } from 'react-router-dom'
 import { ArrowRight, ArrowUpRight, MapPin, Phone, Clock, Mail } from 'lucide-react'
 import gsap from 'gsap'
@@ -6,9 +7,6 @@ import gsap from 'gsap'
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
-const WA_BASE    = 'https://wa.me/524423723972?text='
-const WA_FOOTER  = WA_BASE + encodeURIComponent('Hola Revolution505, vi su página y quiero hablar sobre mi proyecto digital.')
-const WA_LLAMADA = WA_BASE + encodeURIComponent('Hola, quiero agendar una llamada gratuita de 15 min para hablar de mi proyecto.')
 
 const MARQUEE_CHUNK = 'REVOLUTION505 • TECNOLOGÍA • MICHOACÁN • DISEÑO PREMIUM • SOLUCIONES QUE CONVIERTEN • '
 
@@ -76,7 +74,7 @@ const FacebookSVG = () => (
 )
 
 const SOCIALS = [
-  { label: 'WhatsApp',  href: WA_FOOTER,                          Icon: WhatsAppSVG  },
+  { label: 'WhatsApp',  href: WA.footer,                          Icon: WhatsAppSVG  },
   { label: 'Instagram', href: 'https://www.instagram.com/revolution.505/', Icon: InstagramSVG },
   { label: 'LinkedIn',  href: 'https://linkedin.com/company/revolution505', Icon: LinkedInSVG  },
   { label: 'Facebook',  href: 'https://www.facebook.com/profile.php?id=61551803583086', Icon: FacebookSVG  },
@@ -199,7 +197,7 @@ export default function FooterSection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             {/* Primary */}
             <a
-              href={WA_FOOTER}
+              href={WA.footer}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative rounded-full hover:scale-[1.03] active:scale-[0.98] transition-transform duration-200"
@@ -218,7 +216,7 @@ export default function FooterSection() {
 
             {/* Secondary */}
             <a
-              href={WA_LLAMADA}
+              href={WA.llamada}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative rounded-full"
@@ -251,7 +249,7 @@ export default function FooterSection() {
             </div>
             <div className="flex items-center gap-2 text-xs text-muted">
               <Mail className="w-3.5 h-3.5 text-accent flex-shrink-0" />
-              contacto@revolution505.com
+              <a href={CONTACT_MAILTO} className="hover:text-text-primary transition-colors">{CONTACT_EMAIL}</a>
             </div>
           </div>
         </div>

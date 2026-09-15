@@ -1,9 +1,6 @@
+import { WA } from '../../constants/whatsapp'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-const WA_HREF =
-  'https://wa.me/524423723972?text=' +
-  encodeURIComponent('Hola Revolution505, vi su sitio web y quiero cotizar un proyecto. ¿Están disponibles?')
 
 export default function WhatsAppButton() {
   const [visible, setVisible] = useState(false)
@@ -23,7 +20,7 @@ export default function WhatsAppButton() {
     <AnimatePresence>
       {visible && (
         <motion.a
-          href={WA_HREF}
+          href={WA.floating}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Contactar por WhatsApp"

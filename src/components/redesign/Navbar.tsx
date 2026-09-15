@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { WA } from '../../constants/whatsapp'
 import { motion, AnimatePresence }     from 'framer-motion'
 import { Link, useLocation }           from 'react-router-dom'
 import { ArrowUpRight }                from 'lucide-react'
@@ -14,9 +15,6 @@ const LINKS = [
   { label: 'Contacto',   href: '/contacto'    },
 ] as const
 
-const WA_CTA =
-  'https://wa.me/524423723972?text=' +
-  encodeURIComponent('Hola Revolution505, quiero cotizar un proyecto. ¿Están disponibles?')
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Main component
@@ -161,7 +159,7 @@ export default function Navbar() {
 
         {/* ── CTA ── */}
         <a
-          href={WA_CTA}
+          href={WA.navbar}
           target="_blank"
           rel="noopener noreferrer"
           className="group/cta relative flex-shrink-0"
@@ -221,7 +219,7 @@ export default function Navbar() {
 
             <div className="pt-1 border-t border-stroke mt-1">
               <a
-                href={WA_CTA}
+                href={WA.navbar}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl text-sm font-medium text-white accent-gradient"
