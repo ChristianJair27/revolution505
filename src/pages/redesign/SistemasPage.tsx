@@ -176,7 +176,7 @@ function SistemasHero() {
 export default function SistemasPage() {
   usePageMeta({
     title:       'Sistemas a Medida',
-    description: 'POS para restaurantes y comercios, sistemas de reservas, CRM empresarial y plataformas streaming en Querétaro. Sin mensualidades — el código es tuyo.',
+    description: 'POS, reservas, CRM y streaming a medida. Base en Querétaro, entrega en México y remoto. Sin mensualidades — el código es tuyo.',
     canonical:   '/sistemas',
   })
   return (
