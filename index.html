@@ -6,10 +6,10 @@
     <link rel="icon" type="image/x-icon" href="/Logorevazul.ico" />
 
     <!-- Primary Meta Tags -->
-    <title>Revolution505 — Desarrollo Web Profesional en Querétaro, México</title>
-    <meta name="title"       content="Revolution505 — Desarrollo Web Profesional en Querétaro, México" />
-    <meta name="description" content="Agencia de desarrollo web en Querétaro. Sitios profesionales, sistemas POS, CRM y tiendas online desde $6,500 MXN. Resultados garantizados. Respuesta en 2 horas." />
-    <meta name="keywords"    content="desarrollo web querétaro, páginas web querétaro, sistema pos querétaro, agencia digital querétaro, tienda online querétaro, CRM querétaro" />
+    <title>Revolution505 — Desarrollo Web en Querétaro | México & remoto</title>
+    <meta name="title"       content="Revolution505 — Desarrollo Web en Querétaro | México & remoto" />
+    <meta name="description" content="Agencia de desarrollo web en Querétaro con alcance México y remoto. Sitios, POS, CRM y e-commerce desde $6,500 MXN. Cotiza por correo o WhatsApp. Respuesta en menos de 2 horas." />
+    <meta name="keywords"    content="desarrollo web querétaro, páginas web México, agencia digital LATAM, sistemas POS, CRM, e-commerce, desarrollo web remoto" />
     <meta name="robots"      content="index, follow" />
     <meta name="language"    content="Spanish" />
     <meta name="author"      content="Revolution505 Tech Solutions" />
@@ -26,8 +26,8 @@
     <meta property="og:url"         content="https://revolution505.com/" />
     <meta property="og:site_name"   content="Revolution505" />
     <meta property="og:locale"      content="es_MX" />
-    <meta property="og:title"       content="Revolution505 — Desarrollo Web Profesional en Querétaro" />
-    <meta property="og:description" content="Agencia de desarrollo web en Querétaro. Sitios profesionales, sistemas POS, CRM y tiendas online desde $6,500 MXN. Resultados garantizados." />
+    <meta property="og:title"       content="Revolution505 — Desarrollo web en Querétaro, México y remoto" />
+    <meta property="og:description" content="Desarrollo web en Querétaro con clientes en México y el extranjero. Sitios, sistemas y e-commerce desde $6,500 MXN." />
     <meta property="og:image"       content="https://revolution505.com/assets/revolution-pag.png" />
     <meta property="og:image:width"  content="1200" />
     <meta property="og:image:height" content="630" />
@@ -36,8 +36,8 @@
     <!-- Twitter / X -->
     <meta name="twitter:card"        content="summary_large_image" />
     <meta name="twitter:site"        content="@revolution505mx" />
-    <meta name="twitter:title"       content="Revolution505 — Desarrollo Web Profesional en Querétaro" />
-    <meta name="twitter:description" content="Agencia de desarrollo web en Querétaro. Sitios profesionales, sistemas POS, CRM y tiendas online desde $6,500 MXN." />
+    <meta name="twitter:title"       content="Revolution505 — Desarrollo web en Querétaro, México y remoto" />
+    <meta name="twitter:description" content="Desarrollo web en Querétaro · México y remoto. Sitios, POS, CRM y e-commerce desde $6,500 MXN." />
     <meta name="twitter:image"       content="https://revolution505.com/assets/revolution-pag.png" />
 
     <!-- Performance: preconnect for external resources -->
@@ -49,35 +49,56 @@
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
-    <!-- Structured Data: LocalBusiness -->
+    <!-- Structured Data: Organization + LocalBusiness (QRO + remoto) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Revolution505 Tech Solutions",
-      "description": "Agencia de desarrollo web en Querétaro. Sitios profesionales, sistemas POS, CRM y tiendas online.",
-      "url": "https://revolution505.com",
-      "telephone": "+52-442-372-3972",
-      "email": "contacto@revolution505.com",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Querétaro",
-        "addressRegion": "Querétaro",
-        "addressCountry": "MX"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 20.5881,
-        "longitude": -100.3899
-      },
-      "openingHours": "Mo-Fr 09:00-19:00",
-      "priceRange": "$$$",
-      "sameAs": [
-        "https://www.instagram.com/revolution.505/",
-        "https://www.facebook.com/profile.php?id=61551803583086"
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://revolution505.com/#org",
+          "name": "Revolution505 Tech Solutions",
+          "url": "https://revolution505.com",
+          "email": "contacto@revolution505.com",
+          "telephone": "+52-442-372-3972",
+          "sameAs": [
+            "https://www.instagram.com/revolution.505/",
+            "https://www.facebook.com/profile.php?id=61551803583086"
+          ],
+          "areaServed": ["MX", "LATAM", "Worldwide"]
+        },
+        {
+          "@type": "LocalBusiness",
+          "@id": "https://revolution505.com/#local",
+          "name": "Revolution505 — Querétaro",
+          "description": "Agencia de desarrollo web en Querétaro. Sitios, sistemas POS, CRM y tiendas online para México y clientes remotos.",
+          "url": "https://revolution505.com",
+          "telephone": "+52-442-372-3972",
+          "email": "contacto@revolution505.com",
+          "priceRange": "$$-$$$",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Querétaro",
+            "addressRegion": "Querétaro",
+            "addressCountry": "MX"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 20.5881,
+            "longitude": -100.3899
+          },
+          "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+            "opens": "09:00",
+            "closes": "19:00"
+          },
+          "parentOrganization": { "@id": "https://revolution505.com/#org" }
+        }
       ]
     }
     </script>
+
     <!-- ═══════════════════════════════════════════════════════════════════
          Google Tag (gtag.js) — Revolution505
          ID: AW-18211203518
@@ -93,6 +114,27 @@
       gtag('config', 'AW-18211203518', { send_page_view: false });
     </script>
     <!-- ═══════════════════════════════════════════════════════════════════ -->
+
+
+    <!-- Meta Pixel Code (REPLACE_ME_META_PIXEL_ID → ID real en Events Manager) -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;f.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', 'REPLACE_ME_META_PIXEL_ID');
+      fbq('track', 'PageView');
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=REPLACE_ME_META_PIXEL_ID&ev=PageView&noscript=1"
+        alt="" />
+    </noscript>
+    <!-- End Meta Pixel Code -->
 
   </head>
   <body>

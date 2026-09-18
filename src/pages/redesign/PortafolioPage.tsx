@@ -31,6 +31,7 @@ interface Project {
   metrics:     Metric[]
   wa:          string
   featured?:   boolean
+  liveUrl?:    string
 }
 
 const PROJECTS: Project[] = [
@@ -110,19 +111,36 @@ const PROJECTS: Project[] = [
     wa: waUrl('Hola, vi Devilish Store en el portafolio de Revolution505 y me interesa una tienda en línea. ¿Podemos hablar?'),
   },
   {
-    id: 'atakgg', title: 'AtakGG', subtitle: 'Gaming Center POS', category: 'sistemas',
-    tags: ['POS Gaming', 'Timer', 'Dashboard', 'Multi-consola'], image: '/assets/atakgg.png',
-    year: '2024', delivery: '25 días', industry: 'Entretenimiento / Gaming',
-    description: 'Sistema POS especializado para gaming center: control de tiempo por consola, reservas de torneos, cobro por hora y dashboard de ocupación en tiempo real.',
-    challenge: 'AtakGG cobraba manualmente el tiempo de juego con timer de celular. Pérdidas diarias por tiempo no cobrado y cuentas que no cuadraban al final del día.',
-    solution: 'Sistema con 24 estaciones controlables, auto-cobro por tiempo, reservas online para torneos, estadísticas de consola más rentable y cierre de caja automático.',
+    id: 'atakgg', title: 'ATAK.GG', subtitle: 'Stats + torneos LoL', category: 'sistemas',
+    tags: ['Next.js', 'Riot API', 'Brackets', 'Live stats'], image: '/assets/atakgg.png',
+    year: '2025', delivery: 'Producto propio', industry: 'Esports / Gaming', featured: true,
+    liveUrl: 'https://atakgg.revolution505.com',
+    description: 'Plataforma propia de Revolution505: brackets, tabla y stats en vivo para torneos de League of Legends, con datos vía Riot Production API.',
+    challenge: 'Los organizadores locales dependían de herramientas genéricas sin stats profundas ni identidad propia para jugadores LATAM.',
+    solution: 'App web self-hosted (Coolify) con torneos, resumen, live stats y overlay companion. En producción: atakgg.revolution505.com.',
     metrics: [
-      { icon: '🎮', label: 'Consolas controladas',  value: '24'     },
-      { icon: '💸', label: 'Pérdidas por errores',  value: '$0'     },
-      { icon: '⚡', label: 'Tiempo de check-in',    value: '30 seg' },
-      { icon: '📊', label: 'Ingresos trackeados',   value: '100%'   },
+      { icon: '🌐', label: 'URL live', value: 'atakgg.revolution505.com' },
+      { icon: '📡', label: 'API', value: 'Riot Production' },
+      { icon: '🖥️', label: 'Hosting', value: 'Coolify self-host' },
+      { icon: '🎮', label: 'Juego', value: 'League of Legends' },
     ],
-    wa: waUrl('Hola, vi AtakGG en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
+    wa: waUrl('Hola, vi ATAK.GG en el portafolio de Revolution505 y me interesa una plataforma de torneos/stats. ¿Podemos hablar?'),
+  },
+  {
+    id: 'sonorarev', title: 'SonoraRev', subtitle: 'Reproductor de música', category: 'web',
+    tags: ['App web', 'Audio', 'Self-hosted'], image: '/assets/datacenter.jpg',
+    year: '2025', delivery: 'Producto propio', industry: 'Media / Producto',
+    liveUrl: 'https://sonorarev.com',
+    description: 'Producto propio del ecosistema Revolution505: app de reproducción de música (SonoraRev). Incluido en portafolio para mostrar alcance de producto, no como campaña de ads.',
+    challenge: 'Necesitábamos demostrar capacidad de producto digital completo más allá de landings de clientes.',
+    solution: 'App self-hosted en el dominio sonorarev, parte del stack open source de la empresa.',
+    metrics: [
+      { icon: '🎵', label: 'Tipo', value: 'Music player' },
+      { icon: '🔓', label: 'Stack', value: 'Open source' },
+      { icon: '🏢', label: 'Dueño', value: 'Revolution505' },
+      { icon: '🌎', label: 'Alcance', value: 'Producto propio' },
+    ],
+    wa: waUrl('Hola, vi SonoraRev en el portafolio de Revolution505 y me interesa una app de producto. ¿Podemos hablar?'),
   },
   {
     id: 'nexus-dental', title: 'Nexus Dental', subtitle: 'Clínica + Reservas Online', category: 'web',
@@ -568,7 +586,7 @@ function PortafolioHero() {
           </a>
           <div className="flex items-center gap-2 text-xs text-muted">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            Respondemos en &lt; 2 horas
+            Respondemos en < 2 horas
           </div>
         </motion.div>
       </div>

@@ -162,7 +162,7 @@ function ProcesoHero() {
 export default function ProcesoPag() {
   usePageMeta({
     title:       'Proceso de Trabajo',
-    description: 'Conoce cómo trabajamos: 6 pasos claros del briefing al lanzamiento. Entrega promedio en 12 días hábiles con seguimiento constante y sin sorpresas.',
+    description: 'Proceso claro en 6 pasos — briefing a lanzamiento. Entrega promedio 12 días hábiles. Clientes en Querétaro, México y remoto.',
     canonical:   '/proceso',
   })
   return (

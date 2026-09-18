@@ -161,7 +161,7 @@ function PreciosHero() {
 export default function PreciosPage() {
   usePageMeta({
     title:       'Precios y Planes',
-    description: 'Planes web en Querétaro desde $6,500 MXN. Sin letra pequeña, sin cargos ocultos. Hosting, dominio y soporte incluidos. Cotización gratis en Querétaro.',
+    description: 'Planes web desde $6,500 MXN — Querétaro, México y remoto. Sin letra pequeña. Hosting y soporte incluidos. Cotiza por correo o WhatsApp.',
     canonical:   '/precios',
   })
   return (

@@ -34,6 +34,25 @@ declare global {
     dataLayer: any[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     gtag: (...args: any[]) => void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fbq?: (...args: any[]) => void
+  }
+}
+
+/** Meta Pixel PageView en cada cambio de ruta SPA (además del PageView inicial en index.html). */
+export function trackSpaPageView(_path?: string): void {
+  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+    window.fbq('track', 'PageView')
+  }
+}
+
+/** Meta Pixel Contact — clics WhatsApp / teléfono. */
+export function trackMetaContact(contentName: 'whatsapp' | 'phone'): void {
+  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+    window.fbq('track', 'Contact', {
+      content_name: contentName,
+      content_category: 'lead',
+    })
   }
 }
 
@@ -147,6 +166,9 @@ export function initWhatsAppTracking(): void {
       // Conversión Google Ads — REPLACE_ME_WHATSAPP_CONVERSION_LABEL en Ads
       // cuando tengas el label real: edita WA_CONVERSION_SEND_TO arriba.
       gtagWhatsAppClick(WA_CONVERSION_SEND_TO)
+
+      // Meta Pixel Contact (brief PIXEL-brief-dev.md)
+      trackMetaContact('whatsapp')
     },
     { passive: true },
   )
@@ -175,6 +197,9 @@ export function initTelClickTracking(): void {
 
       // Opcional: REPLACE_ME_CALL_CONVERSION_LABEL cuando exista en Google Ads
       gtagCallClick(CALL_CONVERSION_SEND_TO)
+
+      // Meta Pixel Contact en tel:
+      trackMetaContact('phone')
     },
     { passive: true },
   )

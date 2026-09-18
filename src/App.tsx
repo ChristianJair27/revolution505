@@ -3,7 +3,7 @@ import { useEffect }                               from 'react'
 import Navbar         from './components/redesign/Navbar'
 import FooterSection  from './components/redesign/FooterSection'
 import WhatsAppButton from './components/redesign/WhatsAppButton'
-import { gtagPageView, initWhatsAppTracking, initTelClickTracking } from './lib/gtag'
+import { gtagPageView, trackSpaPageView, initWhatsAppTracking, initTelClickTracking } from './lib/gtag'
 
 // Pages
 import Index          from './pages/Index'
@@ -21,7 +21,7 @@ function GtagRouteTracker() {
 
   useEffect(() => {
     // Pequeño delay para que document.title se actualice antes de enviar
-    const id = setTimeout(() => gtagPageView(pathname), 150)
+    const id = setTimeout(() => { gtagPageView(pathname); trackSpaPageView(pathname) }, 150)
     return () => clearTimeout(id)
   }, [pathname])
 

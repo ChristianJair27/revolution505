@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
-import { WA } from '../../constants/whatsapp'
+import { WA, CONTACT_MAILTO, CONTACT_EMAIL } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Mail, MessageCircle } from 'lucide-react'
 import Hls from 'hls.js'
 import gsap from 'gsap'
 
@@ -98,7 +98,7 @@ export default function HeroSection() {
 
         {/* Eyebrow */}
         <span className="hero-blur-in inline-block text-xs text-muted uppercase tracking-[0.3em] mb-8">
-          TECNOLOGÍA DE VANGUARDIA · MÉXICO 2026
+          DESARROLLO WEB · QUERÉTARO · ALCANCE GLOBAL
         </span>
 
         {/* Main headline */}
@@ -127,17 +127,19 @@ export default function HeroSection() {
         </div>
 
         {/* Description */}
-        <p className="hero-blur-in text-sm md:text-base text-muted max-w-md mx-auto mb-12 leading-relaxed">
-          Agencia de desarrollo web en Querétaro. Sitios profesionales, sistemas a medida
-          y tiendas online con tecnología moderna y resultados medibles.
+        <p className="hero-blur-in text-sm md:text-base text-muted max-w-lg mx-auto mb-12 leading-relaxed">
+          Agencia de desarrollo web en Querétaro con clientes en México y el extranjero.
+          Sitios, sistemas a medida, tiendas online y apps en infraestructura propia (Coolify).
+          Cotiza por correo o WhatsApp — sin métricas inventadas, solo proyectos reales.
         </p>
 
-        {/* ── CTA Buttons ── */}
+        {/* ── Dual CTAs: correo + WhatsApp ── */}
         <div className="hero-blur-in inline-flex flex-col sm:flex-row items-center gap-4">
 
-          {/* Primary: "Ver Proyectos" — solid with gradient border on hover */}
-          <button
-            onClick={() => scrollTo('portafolio')}
+          {/* Primary: correo */}
+          <a
+            title={CONTACT_EMAIL}
+            href={`${CONTACT_MAILTO}?subject=${encodeURIComponent('Cotización — Revolution505')}&body=${encodeURIComponent('Hola Revolution505,\n\nQuiero cotizar un proyecto.\n\nNombre:\nNegocio:\nQué necesito:\n')}`}
             className="group relative rounded-full hover:scale-105 transition-transform duration-200"
           >
             <span
@@ -146,12 +148,13 @@ export default function HeroSection() {
               aria-hidden
             />
             <span className="relative z-10 flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium bg-text-primary text-bg group-hover:bg-bg group-hover:text-text-primary transition-all duration-200">
-              Ver Proyectos
+              <Mail className="w-4 h-4" />
+              Cotizar por correo
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </span>
-          </button>
+          </a>
 
-          {/* Secondary: "Hablar por WhatsApp" — outlined with gradient border on hover */}
+          {/* Secondary: WhatsApp */}
           <a
             href={WA.hero}
             target="_blank"
@@ -160,15 +163,23 @@ export default function HeroSection() {
           >
             <span
               className="absolute rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
-              style={{ inset: '-2px', background: 'linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%)' }}
+              style={{ inset: '-2px', background: 'linear-gradient(90deg, #25D366 0%, #128C7E 100%)' }}
               aria-hidden
             />
             <span className="relative z-10 flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium border-2 border-stroke bg-bg text-text-primary group-hover:border-transparent transition-all duration-200">
+              <MessageCircle className="w-4 h-4 text-emerald-400" />
               Hablar por WhatsApp
               <ArrowRight className="w-4 h-4" />
             </span>
           </a>
         </div>
+        <p className="hero-blur-in mt-5 text-[11px] text-muted/70">
+          Correo: {CONTACT_EMAIL} · O{' '}
+          <button type="button" onClick={() => scrollTo('portafolio')} className="underline underline-offset-2 hover:text-text-primary transition-colors">
+            ver proyectos reales
+          </button>
+          {' '}· Respuesta en &lt; 2 h (CST)
+        </p>
       </div>
 
       {/* ── Scroll indicator ── */}
