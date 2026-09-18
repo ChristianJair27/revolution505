@@ -22,7 +22,7 @@ export default function ContactoPage() {
   usePageMeta({
     title: 'Contacto',
     description:
-      'Cotiza tu proyecto web, sistema o tienda en línea. Formulario a contacto@revolution505.com y WhatsApp. Respuesta en menos de 2 horas. Agencia en Querétaro, México.',
+      'Cotiza tu proyecto web o sistema. Lead a contacto@revolution505.com + WhatsApp. Atención en Querétaro, México y remoto. Respuesta en menos de 2 horas.',
     canonical: '/contacto',
   })
 
@@ -64,7 +64,7 @@ export default function ContactoPage() {
   }
 
   const INFO = [
-    { icon: <MapPin className="w-4 h-4" />, label: 'Ubicación', value: 'Querétaro, México (atención nacional)' },
+    { icon: <MapPin className="w-4 h-4" />, label: 'Ubicación', value: 'Querétaro, México · nacional y remoto' },
     { icon: <Clock className="w-4 h-4" />, label: 'Horario', value: 'Lun – Vie 9:00 – 19:00 CST' },
     {
       icon: <Phone className="w-4 h-4" />,
