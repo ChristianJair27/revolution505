@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
-import { WA } from '../../constants/whatsapp'
+import { WA, CONTACT_MAILTO, CONTACT_EMAIL } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, ArrowUpRight } from 'lucide-react'
+import { Plus, ArrowUpRight, Mail } from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -29,7 +29,7 @@ const FAQS = [
   },
   {
     q: '¿Pueden crear mi página si estoy en otra ciudad de México?',
-    a: 'Trabajamos 100% de forma remota. Hemos entregado proyectos en CDMX, Guadalajara, Monterrey, Querétaro y toda la República. La comunicación es por WhatsApp, videollamada y correo — sin reuniones presenciales obligatorias.',
+    a: 'Sí. Base en Querétaro y operación 100% remota: CDMX, Guadalajara, Monterrey, toda México y clientes en el extranjero. Coordinamos por WhatsApp, correo (contacto@revolution505.com) y videollamada — sin reuniones presenciales obligatorias.',
   },
   {
     q: '¿Qué diferencia hay entre una landing page y un sitio web?',
@@ -42,6 +42,14 @@ const FAQS = [
   {
     q: '¿Pueden hacer mi sitio aparecer en Google?',
     a: 'Implementamos SEO on-page en todos los planes: optimización técnica, keywords locales, Schema markup y Google Search Console. El posicionamiento orgánico toma entre 2-4 meses para términos locales (ej. "restaurante en Querétaro"). Los anuncios pagados en Google pueden dar resultados inmediatos.',
+  },
+  {
+    q: '¿Puedo cotizar solo por correo, sin WhatsApp?',
+    a: 'Sí. Escribe a contacto@revolution505.com o usa el formulario en /contacto: el lead llega al mismo buzón. WhatsApp es opcional si prefieres chat rápido.',
+  },
+  {
+    q: '¿Atienden proyectos fuera de México?',
+    a: 'Sí. Trabajamos en español (e inglés técnico cuando hace falta) con clientes remotes. Pagos en MXN o transferencia internacional según el alcance; la entrega y el soporte siguen el mismo proceso.',
   },
 ]
 
@@ -196,7 +204,7 @@ export default function FAQSection() {
         >
           <div>
             <p className="text-base font-medium text-text-primary">¿Tienes un proyecto en mente?</p>
-            <p className="text-sm text-muted mt-1">Habla con nosotros hoy — respuesta garantizada en menos de 2 horas.</p>
+            <p className="text-sm text-muted mt-1">Correo o WhatsApp — respuesta en menos de 2 horas (Querétaro / remoto).</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
@@ -213,18 +221,18 @@ export default function FAQSection() {
                 aria-hidden
               />
               <span className="relative z-10 flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-accent text-white text-sm font-medium">
-                Empezar ahora
+                WhatsApp
                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </span>
             </a>
 
-            {/* Secondary */}
+            {/* Secondary: correo */}
             <a
-              href="#calculadora"
-              onClick={e => { e.preventDefault(); document.getElementById('calculadora')?.scrollIntoView({ behavior: 'smooth' }) }}
+              href={`${CONTACT_MAILTO}?subject=${encodeURIComponent('Cotización — Revolution505')}`}
               className="flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-stroke text-sm text-muted hover:text-text-primary hover:border-stroke/70 transition-colors duration-200"
             >
-              Ver calculadora de precios
+              <Mail className="w-4 h-4" />
+              Escribir a {CONTACT_EMAIL}
             </a>
           </div>
         </motion.div>
