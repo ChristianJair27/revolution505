@@ -1,11 +1,10 @@
+import { WA } from '../../constants/whatsapp'
 import { motion }        from 'framer-motion'
 import { ArrowRight }     from 'lucide-react'
 import SimuladorSection   from '../../components/redesign/SimuladorSection'
 import PreciosSection     from '../../components/redesign/PreciosSection'
 import { usePageMeta }    from '../../hooks/usePageMeta'
 
-const WA = 'https://wa.me/524423723972?text=' +
-  encodeURIComponent('Hola, vi los precios de Revolution505 y quiero una cotización personalizada. ¿Podemos hablar?')
 
 // ── Floating price tokens ────────────────────────────────────────────────────
 const PRICE_TOKENS = [
@@ -129,7 +128,7 @@ function PreciosHero() {
           className="flex flex-wrap items-center justify-center gap-4"
         >
           <a
-            href={WA}
+            href={WA.precios}
             target="_blank" rel="noopener noreferrer"
             className="group relative rounded-full hover:scale-105 transition-transform duration-200"
           >
@@ -162,7 +161,7 @@ function PreciosHero() {
 export default function PreciosPage() {
   usePageMeta({
     title:       'Precios y Planes',
-    description: 'Planes web desde $6,500 MXN. Sin letra pequeña, sin cargos ocultos. Hosting, dominio y soporte incluidos. Cotización gratis en 24 horas.',
+    description: 'Planes web en Querétaro desde $6,500 MXN. Sin letra pequeña, sin cargos ocultos. Hosting, dominio y soporte incluidos. Cotización gratis en Querétaro.',
     canonical:   '/precios',
   })
   return (

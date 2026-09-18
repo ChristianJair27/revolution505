@@ -25,3 +25,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Lead form SMTP secrets (Hostinger)
+public/api/lead.config.php
+dist/api/lead.config.php

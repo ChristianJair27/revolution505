@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { waUrl as toWa, WA } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Check, ArrowRight, Zap, Globe, ShoppingCart,
@@ -185,7 +186,7 @@ function buildWAUrl(config: Config, minP: number, maxP: number, days: string): s
     '¿Pueden enviarme una propuesta formal? 🙏',
   ]
 
-  return `https://wa.me/524423723972?text=${encodeURIComponent(lines.join('\n'))}`
+  return toWa(lines.join('\n'))
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -641,7 +642,7 @@ export default function CalculadoraSection() {
 
                 {/* Secondary — Schedule call */}
                 <a
-                  href="https://wa.me/524423723972?text=Hola%2C%20quiero%20agendar%20una%20llamada%20gratuita%20para%20hablar%20de%20mi%20proyecto."
+                  href={WA.llamada}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-full border border-stroke text-sm text-muted hover:text-text-primary hover:border-stroke/70 transition-colors duration-200"

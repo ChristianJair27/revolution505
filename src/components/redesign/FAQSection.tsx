@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { WA } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, ArrowUpRight } from 'lucide-react'
 import gsap from 'gsap'
@@ -160,7 +161,7 @@ export default function FAQSection() {
           <div className="flex-shrink-0 flex flex-col gap-2">
             <p className="text-xs text-muted">¿No encuentras tu respuesta?</p>
             <a
-              href="https://wa.me/524423723972?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20sus%20servicios.%20%C2%BFPodemos%20hablar%3F"
+              href={WA.faq}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-stroke bg-surface/40 text-sm text-muted hover:text-text-primary hover:border-accent/30 transition-all duration-200 self-start"
@@ -201,7 +202,7 @@ export default function FAQSection() {
           <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
             {/* Primary */}
             <a
-              href="https://wa.me/524423723972?text=Hola%20Revolution505%2C%20quiero%20hablar%20sobre%20un%20proyecto.%20%C2%BFEst%C3%A1n%20disponibles%3F"
+              href={WA.navbar}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative rounded-full"

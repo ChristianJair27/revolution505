@@ -6,19 +6,19 @@ const posts = [
     title: '¿Cuánto cuesta una página web en México? [2026]',
     desc: 'Guía completa de precios para desarrollar tu sitio web profesional en México.',
     tag: 'Precios',
-    slug: '#',
+    slug: '/precios',
   },
   {
     title: 'Desarrollo web en Querétaro: Guía 2026',
     desc: 'Todo lo que necesitas saber para crear tu página web en Querétaro.',
     tag: 'Local SEO',
-    slug: '#',
+    slug: '/precios',
   },
   {
     title: 'SEO Local para Pequeñas Empresas',
     desc: 'Checklist práctico para aparecer en Google cuando tus clientes te buscan.',
     tag: 'SEO',
-    slug: '#',
+    slug: '/precios',
   },
 ]
 
@@ -33,17 +33,17 @@ export default function InsightsSection() {
           className="flex items-end justify-between mb-14"
         >
           <div>
-            <span className="text-xs tracking-[0.2em] text-muted uppercase">Blog</span>
+            <span className="text-xs tracking-[0.2em] text-muted uppercase">Recursos</span>
             <h2 className="text-3xl md:text-5xl font-display italic text-text-primary mt-2">
               Insights{' '}
-              <span className="accent-gradient-text">& Artículos</span>
+              <span className="accent-gradient-text">prácticas</span>
             </h2>
           </div>
           <a
-            href="#"
+            href="/precios"
             className="hidden md:flex items-center gap-2 text-xs text-muted hover:text-text-primary transition-colors"
           >
-            Ver todos <ArrowUpRight className="w-3 h-3" />
+            Ver planes <ArrowUpRight className="w-3 h-3" />
           </a>
         </motion.div>
 
@@ -66,17 +66,17 @@ export default function InsightsSection() {
               </h3>
               <p className="text-xs text-muted leading-relaxed">{post.desc}</p>
               <div className="mt-4 flex items-center gap-1 text-xs text-accent opacity-0 group-hover:opacity-100 transition-opacity">
-                Leer más <ArrowUpRight className="w-3 h-3" />
+                Ver planes <ArrowUpRight className="w-3 h-3" />
               </div>
             </motion.a>
           ))}
         </div>
 
         <a
-          href="#"
+          href="/precios"
           className="md:hidden flex items-center justify-center gap-2 text-xs text-muted mt-8"
         >
-          Ver todos los artículos <ArrowUpRight className="w-3 h-3" />
+          Ver planes <ArrowUpRight className="w-3 h-3" />
         </a>
       </div>
     </section>

@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
+import { WA } from '../../constants/whatsapp'
 import { motion, useInView } from 'framer-motion'
 import { Star } from 'lucide-react'
 import gsap from 'gsap'
@@ -296,7 +297,7 @@ export default function TestimoniosSection() {
             ¿Quieres ser el siguiente caso de éxito?
           </p>
           <a
-            href="https://wa.me/524423723972?text=Hola%2C%20vi%20los%20testimonios%20y%20quiero%20lograr%20resultados%20similares%20para%20mi%20negocio."
+            href={WA.testimonios}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-stroke text-sm text-muted hover:text-text-primary hover:border-accent/40 transition-all duration-200"

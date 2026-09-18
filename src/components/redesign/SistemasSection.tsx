@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { WA } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import gsap from 'gsap'
@@ -54,7 +55,7 @@ const SISTEMAS: Sistema[] = [
     ],
     badge: 'Sistema Propio',
     price: 'Desde $18,000 MXN',
-    whatsapp: 'https://wa.me/524423723972?text=' + encodeURIComponent('Hola, me interesa el Sistema POS para Restaurante. ¿Pueden darme más información y una demo?'),
+    whatsapp: WA.sistPOSRestaurante,
   },
   {
     id: 'pos',
@@ -77,7 +78,7 @@ const SISTEMAS: Sistema[] = [
     ],
     badge: 'Sistema Propio',
     price: 'Desde $14,000 MXN',
-    whatsapp: 'https://wa.me/524423723972?text=' + encodeURIComponent('Hola, me interesa el Sistema POS General para mi negocio. ¿Tienen una demo disponible?'),
+    whatsapp: WA.sistPOSGeneral,
   },
   {
     id: 'reservas',
@@ -98,7 +99,7 @@ const SISTEMAS: Sistema[] = [
     ],
     badge: 'Sistema Propio',
     price: 'Desde $16,000 MXN',
-    whatsapp: 'https://wa.me/524423723972?text=' + encodeURIComponent('Hola, me interesa el Sistema de Reservas. ¿Pueden mostrarme cómo funciona?'),
+    whatsapp: WA.sistReservasDemo,
   },
   {
     id: 'crm',
@@ -119,7 +120,7 @@ const SISTEMAS: Sistema[] = [
     ],
     badge: 'Sistema Propio',
     price: 'Desde $22,000 MXN',
-    whatsapp: 'https://wa.me/524423723972?text=' + encodeURIComponent('Hola, me interesa el CRM Empresarial. ¿Podemos agendar una llamada para verlo?'),
+    whatsapp: WA.sistCRMDemo,
   },
 ]
 
@@ -664,7 +665,7 @@ export default function SistemasSection() {
 
                 {/* Secondary: general inquiry */}
                 <a
-                  href="https://wa.me/524423723972?text=Hola%2C%20quiero%20saber%20m%C3%A1s%20sobre%20sus%20sistemas%20propios.%20%C2%BFPodemos%20agendar%20una%20llamada%3F"
+                  href={WA.sistemasInfo}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-full border border-stroke text-sm text-muted hover:text-text-primary hover:border-stroke/70 transition-colors duration-200"

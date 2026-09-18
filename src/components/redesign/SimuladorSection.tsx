@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { waUrl } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import gsap from 'gsap'
@@ -156,7 +157,7 @@ function buildWAUrl(industry: Industry): string {
     '',
     'Me interesa lograr estos resultados. ¿Podemos hablar? 🙏',
   ]
-  return `https://wa.me/524423723972?text=${encodeURIComponent(lines.join('\n'))}`
+  return waUrl(lines.join('\n'))
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

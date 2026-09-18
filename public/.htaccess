@@ -1,0 +1,14 @@
+# Revolution505 — SPA + API PHP (Hostinger Apache)
+Options -MultiViews
+RewriteEngine On
+
+# Keep real files and directories (assets, api/*.php, robots, sitemap)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Never rewrite API PHP to the SPA
+RewriteRule ^api/ - [L]
+
+# SPA fallback
+RewriteRule ^ index.html [L]

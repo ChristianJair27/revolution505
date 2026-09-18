@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, ArrowRight, X, Shield } from 'lucide-react'
+import CasoProcesoBlock from './CasoProcesoBlock'
+import { WA } from '../../constants/whatsapp'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -26,8 +28,6 @@ interface Plan {
   wa:            string
 }
 
-const WA_BASE = 'https://wa.me/524423723972?text='
-
 const WEB_PLANS: Plan[] = [
   {
     id:          'esencial',
@@ -45,7 +45,7 @@ const WEB_PLANS: Plan[] = [
       'Hosting + dominio .com.mx 1 año',
     ],
     notIncluded: ['Blog', 'Panel admin', 'Google Analytics'],
-    wa: encodeURIComponent('Hola, vi sus planes en revolution505.com y me interesa el Plan Esencial ($6,500 MXN). ¿Cuándo podemos hablar?'),
+    wa: WA.planBasico,
   },
   {
     id:            'profesional',
@@ -70,7 +70,7 @@ const WEB_PLANS: Plan[] = [
       '30 días soporte post-entrega',
     ],
     notIncluded:   [],
-    wa: encodeURIComponent('Hola, vi sus planes en revolution505.com y me interesa el Plan Profesional ($12,500 MXN). ¿Están disponibles para comenzar?'),
+    wa: WA.planPro,
   },
   {
     id:       'premium',
@@ -92,7 +92,7 @@ const WEB_PLANS: Plan[] = [
       'Capacitación + 60 días soporte prioritario',
     ],
     notIncluded: [],
-    wa: encodeURIComponent('Hola, vi sus planes en revolution505.com y me interesa el Plan Premium ($22,500 MXN). ¿Podemos agendar una llamada?'),
+    wa: WA.planPremium,
   },
 ]
 
@@ -102,7 +102,7 @@ const SISTEMA_PLANS: Plan[] = [
     name:     'Sistema POS',
     emoji:    '🖥',
     price:    18_000,
-    desc:     'Punto de venta para restaurantes, comercios y farmacias',
+    desc:     'POS restaurante desde $18,000 (general desde $14,000 en /sistemas)',
     delivery: '20-30 días hábiles',
     highlight: false,
     features: [
@@ -115,7 +115,7 @@ const SISTEMA_PLANS: Plan[] = [
       'Sin mensualidades — código tuyo',
     ],
     notIncluded: ['Multi-sucursal'],
-    wa: encodeURIComponent('Hola, vi sus servicios en revolution505.com y me interesa el Sistema POS ($18,000 MXN). ¿Tienen una demo disponible?'),
+    wa: WA.sistPOS,
   },
   {
     id:       'reservas',
@@ -136,7 +136,7 @@ const SISTEMA_PLANS: Plan[] = [
       'Sin mensualidades — código tuyo',
     ],
     notIncluded: [],
-    wa: encodeURIComponent('Hola, vi sus servicios en revolution505.com y me interesa el Sistema de Reservas ($16,000 MXN). ¿Podemos hablar?'),
+    wa: WA.sistReservas,
   },
   {
     id:       'crm',
@@ -156,7 +156,7 @@ const SISTEMA_PLANS: Plan[] = [
       'Sin mensualidades — código tuyo',
     ],
     notIncluded: [],
-    wa: encodeURIComponent('Hola, vi sus servicios en revolution505.com y me interesa el CRM Empresarial ($22,000 MXN). ¿Podemos agendar una llamada?'),
+    wa: WA.sistCRM,
   },
 ]
 
@@ -267,7 +267,7 @@ function PlanCard({ plan, index }: PlanCardProps) {
 
         {/* CTA */}
         <a
-          href={`${WA_BASE}${plan.wa}`}
+          href={plan.wa}
           target="_blank"
           rel="noopener noreferrer"
           className={`group relative flex items-center justify-center gap-2 w-full rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
@@ -533,6 +533,13 @@ export default function PreciosSection() {
           </AnimatePresence>
         </div>
 
+        {/* Caso + métrica + proceso comercial */}
+
+
+        <CasoProcesoBlock />
+
+
+
         {/* ── ROI Calculator ── */}
         <ROICalculator selectedPlan={hiPlan} />
 
@@ -548,7 +555,7 @@ export default function PreciosSection() {
           className="mt-6 flex justify-center"
         >
           <a
-            href={`${WA_BASE}${encodeURIComponent('Hola, necesito un proyecto personalizado. ¿Pueden hacerme una cotización a medida?')}`}
+            href={WA.proyectoMedida}
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 px-6 py-3 rounded-full border border-stroke text-sm text-muted hover:text-text-primary hover:border-accent/40 transition-all duration-200"

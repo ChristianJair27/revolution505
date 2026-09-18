@@ -8,8 +8,9 @@
 //   3. gtagCallClick()        — conversión Ads opcional en clics tel:
 //   4. gtagEvent(action, …)   — eventos genéricos personalizados
 //
-// NOTA: /contacto NO envía un form server-side — solo abre WhatsApp.
-//       No dispares lead_form_submit ni gtagContactFormSubmit ahí.
+// NOTA: /contacto envía lead vía POST /api/lead.php (self-hosted).
+//       NO dispares lead_form_submit de Ads hasta tener label real (ticket aparte).
+//       Los clics wa.me / tel: van por initWhatsAppTracking / initTelClickTracking.
 // ============================================================================
 
 /** ID de Google Ads — cambiar aquí si se renueva la cuenta */
@@ -91,8 +92,8 @@ export function gtagCallClick(
 }
 
 /**
- * @deprecated El formulario de /contacto solo abre WhatsApp — no uses esto
- * como lead_form_submit. Preferir el tracking wa.me (initWhatsAppTracking).
+ * Opcional: conversión Ads de formulario cuando exista label real.
+ * /contacto ya dispara gtagEvent('lead_form_submit') al éxito del POST.
  */
 export function gtagContactFormSubmit(conversionLabel = 'PENDIENTE_LABEL'): void {
   gtag('event', 'conversion', {
