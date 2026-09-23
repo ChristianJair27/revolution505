@@ -586,7 +586,7 @@ function PortafolioHero() {
           </a>
           <div className="flex items-center gap-2 text-xs text-muted">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            Respondemos en < 2 horas
+            Respondemos en menos de 2 horas
           </div>
         </motion.div>
       </div>
