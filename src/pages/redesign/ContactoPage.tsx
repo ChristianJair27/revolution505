@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, CheckCircle2, Loader2, MapPin, Clock, Phone, Mail } from 'lucide-react'
 import { usePageMeta } from '../../hooks/usePageMeta'
 import { submitLead } from '../../lib/lead'
+import { trackLead } from '../../lib/gtag'
 import { waFromLead, WA_PHONE_DISPLAY, WA_PHONE_E164, CONTACT_EMAIL, CONTACT_MAILTO } from '../../constants/whatsapp'
 
 const SERVICES = [
@@ -19,12 +20,7 @@ const SERVICES = [
 type Status = 'idle' | 'sending' | 'sent' | 'error'
 
 export default function ContactoPage() {
-  usePageMeta({
-    title: 'Contacto',
-    description:
-      'Cotiza tu proyecto web o sistema. Lead a contacto@revolution505.com + WhatsApp. Atención en Querétaro, México y remoto. Respuesta en menos de 2 horas.',
-    canonical: '/contacto',
-  })
+  usePageMeta('/contacto')
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -56,6 +52,7 @@ export default function ContactoPage() {
       website: website.trim() || undefined,
     })
     if (result.ok) {
+      trackLead(need.trim(), 'contacto_form')
       setStatus('sent')
       return
     }
