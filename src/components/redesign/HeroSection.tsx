@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { WA, CONTACT_MAILTO, CONTACT_EMAIL } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Mail, MessageCircle } from 'lucide-react'
-import Hls from 'hls.js'
+import type HlsType from 'hls.js'
 import gsap from 'gsap'
 
 const roles = ['Páginas Web', 'Sistemas Personalizados', 'Tiendas Online', 'Soluciones Digitales']
@@ -22,22 +22,34 @@ export default function HeroSection() {
     return () => clearInterval(interval)
   }, [])
 
-  /* ── HLS video ── */
+  /* ── HLS video ──
+     hls.js (~160 KB gzip) se importa dinámicamente: ya no bloquea la carga inicial
+     ni se precarga en todas las rutas. Safari usa HLS nativo y nunca lo descarga. */
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
-    if (Hls.isSupported()) {
-      const hls = new Hls({ lowLatencyMode: false, startLevel: -1 })
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = HLS_SRC
+      video.play().catch(() => {})
+      return
+    }
+
+    let hls: HlsType | undefined
+    let cancelled = false
+    import('hls.js').then(({ default: Hls }) => {
+      if (cancelled || !Hls.isSupported()) return
+      hls = new Hls({ lowLatencyMode: false, startLevel: -1 })
       hls.loadSource(HLS_SRC)
       hls.attachMedia(video)
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         video.play().catch(() => {})
       })
-      return () => hls.destroy()
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = HLS_SRC
-      video.play().catch(() => {})
+    }).catch(() => {})
+
+    return () => {
+      cancelled = true
+      hls?.destroy()
     }
   }, [])
 
