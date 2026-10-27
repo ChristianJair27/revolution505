@@ -2,10 +2,8 @@ import { useState, useRef, useEffect } from 'react'
 import { WA, CONTACT_MAILTO, CONTACT_EMAIL } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, ArrowUpRight, Mail } from 'lucide-react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { withGsap } from '../../lib/gsap'
 
-gsap.registerPlugin(ScrollTrigger)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Data
@@ -132,13 +130,12 @@ export default function FAQSection() {
 
   // GSAP ScrollTrigger for header
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    return withGsap((gsap) => {
       gsap.from('.faq-header', {
         opacity: 0, y: 24, duration: 0.7, ease: 'power3.out',
         scrollTrigger: { trigger: sectionRef.current, start: 'top 80%', once: true },
       })
     }, sectionRef)
-    return () => ctx.revert()
   }, [])
 
   return (

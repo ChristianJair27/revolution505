@@ -2,13 +2,11 @@ import { waUrl } from '../../constants/whatsapp'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 import { ArrowUpRight, ArrowRight, X, Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { withGsap } from '../../lib/gsap'
 import { usePageMeta } from '../../hooks/usePageMeta'
 import { Link } from 'react-router-dom'
 import { CASOS } from '../../content/casos'
 
-gsap.registerPlugin(ScrollTrigger)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types & data
@@ -365,17 +363,11 @@ function PortafolioHero() {
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
         <motion.span
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
           className="inline-block text-xs text-muted uppercase tracking-[0.3em] mb-6"
         >
           Portafolio · Revolution505
         </motion.span>
         <motion.h1
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           className="text-5xl md:text-7xl font-display italic text-text-primary leading-[0.92] mb-6"
         >
           Proyectos que{' '}
@@ -383,17 +375,11 @@ function PortafolioHero() {
           <br />por sí solos
         </motion.h1>
         <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.38 }}
           className="text-sm md:text-base text-muted max-w-lg mx-auto mb-8 leading-relaxed"
         >
           Proyectos reales, con enlace al sitio en vivo. Sin métricas infladas: solo lo que construimos.
         </motion.p>
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
           className="flex flex-wrap items-center justify-center gap-4"
         >
           <a
@@ -450,7 +436,7 @@ export default function PortafolioPage() {
   const goNext     = () => hasNext && setModalProject(PROJECTS[currentIndex + 1])
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    return withGsap((gsap) => {
       gsap.from('.port-stats', {
         opacity: 0, y: 18, duration: 0.6, ease: 'power3.out',
         scrollTrigger: { trigger: '.port-stats', start: 'top 82%', once: true },
@@ -460,7 +446,6 @@ export default function PortafolioPage() {
         scrollTrigger: { trigger: '.port-filter', start: 'top 82%', once: true },
       })
     }, gridRef)
-    return () => ctx.revert()
   }, [])
 
   return (

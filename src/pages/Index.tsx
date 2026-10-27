@@ -1,6 +1,5 @@
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { usePageMeta }      from '../hooks/usePageMeta'
-import LoadingScreen        from '../components/redesign/LoadingScreen'
 import Navbar               from '../components/redesign/Navbar'
 import HeroSection          from '../components/redesign/HeroSection'
 import ClientsMarquee       from '../components/redesign/ClientsMarquee'
@@ -18,14 +17,11 @@ import FooterSection        from '../components/redesign/FooterSection'
 import WhatsAppButton       from '../components/redesign/WhatsAppButton'
 
 export default function Index() {
-  const [loading, setLoading] = useState(true)
   const mainRef = useRef<HTMLDivElement>(null)
   usePageMeta('/')
 
   return (
     <>
-      {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
-
       <div ref={mainRef} className="bg-bg text-text-primary font-body">
         <Navbar />
 
@@ -34,6 +30,9 @@ export default function Index() {
 
         {/* 1b — Prueba social inmediata: logos de clientes */}
         <ClientsMarquee />
+
+        {/* Secciones bajo el pliegue: content-visibility (ver .cv-sections en index.css) */}
+        <div className="cv-sections">
 
         {/* 2 — Estimado de precio en tiempo real */}
         <CalculadoraSection />
@@ -64,6 +63,8 @@ export default function Index() {
 
         {/* 9 — Contenido SEO */}
         <InsightsSection />
+
+        </div>
 
         {/* 10 — CTA final + links */}
         <FooterSection />

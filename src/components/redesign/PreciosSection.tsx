@@ -3,10 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Check, ArrowRight, X, Shield, Mail } from 'lucide-react'
 import CasoProcesoBlock from './CasoProcesoBlock'
 import { WA, CONTACT_MAILTO, CONTACT_EMAIL } from '../../constants/whatsapp'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { withGsap } from '../../lib/gsap'
 
-gsap.registerPlugin(ScrollTrigger)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types & data
@@ -391,13 +389,12 @@ export default function PreciosSection() {
   const plans  = tab === 'web' ? WEB_PLANS : SISTEMA_PLANS
   const hiPlan = plans.find(p => p.highlight) ?? plans[1]
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    return withGsap((gsap) => {
       const trigger = { trigger: sectionRef.current, start: 'top 78%', once: true }
       gsap.from('.precio-header', { opacity: 0, y: 24, duration: 0.7, ease: 'power3.out',             scrollTrigger: trigger })
       gsap.from('.precio-toggle', { opacity: 0, y: 14, duration: 0.6, ease: 'power3.out', delay: 0.1, scrollTrigger: trigger })
       gsap.from('.precio-grid',   { opacity: 0, y: 22, duration: 0.7, ease: 'power3.out', delay: 0.2, scrollTrigger: trigger })
     }, sectionRef)
-    return () => ctx.revert()
   }, [])
   return (
     <section ref={sectionRef} id="precios" className="relative py-24 md:py-32 px-4 border-t border-stroke overflow-hidden">
