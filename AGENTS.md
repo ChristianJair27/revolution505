@@ -18,19 +18,26 @@ Sitio web corporativo SPA para Revolution505 Tech Solutions (desarrollo web, sis
 | Comando | Acción |
 |---|---|
 | `npm run dev` | Servidor dev Vite (HMR) |
-| `npm run build` | `tsc -b && vite build` — **typecheck obligatorio antes de build** |
+| `npm run build` | typecheck + build cliente + build SSR + `scripts/prerender.mjs` (HTML por ruta, 404, sitemap) |
 | `npm run lint` | ESLint (`.ts`, `.tsx`, etc.) |
-| `npm run preview` | Vista previa del build |
+| `npm run preview:php` | Sirve `dist/` con PHP + `scripts/php-router.php` (imita el `.htaccess` de Hostinger) en :8899 |
+| `npm test` | Playwright smoke sobre el build (requiere `npm run build`, PHP y Chrome) |
 
-No hay test suite configurada.
+## SEO / prerender (rama seo-v2)
+
+- **`src/seo/routes.ts` es la fuente única** de title/description/canonical/sitemap por ruta. Página nueva = ruta en `App.tsx` (`AppRoutes`) + entrada en `routes.ts`.
+- `npm run build` genera `dist/index.html`, `dist/<ruta>.html`, `dist/404.html` (noindex) y `dist/sitemap.xml` (lastmod = último commit de la fuente). `public/sitemap.xml` ya no existe.
+- `main.tsx` hidrata (`hydrateRoot`) el HTML prerenderizado. Nada de `window`/`document`/`Math.random` durante el render: solo en `useEffect`/handlers, o la hidratación falla.
+- `public/.htaccess`: sin fallback SPA → URLs inexistentes dan **404 real**; `/ruta/` y `/ruta.html` redirigen 301 a `/ruta`.
+- Tracking: IDs y labels de Ads en `.env` (valores públicos) → `src/config/tracking.ts`; eventos en `src/lib/gtag.ts` (`generate_lead`, `whatsapp_click`, `phone_click`, `email_click`).
 
 ## Arquitectura
 
 - `src/pages/` — 6 páginas: Index (Home nuevo), Portfolio, Clients, Blog, Contact
 - `src/components/` — Header, Footer, sections/ (legacy)
 - `src/components/redesign/` — **Nuevos componentes cinematic**: LoadingScreen, Navbar, HeroSection, SelectedWorks, PreciosSection, ProcesoSection, TestimoniosSection, InsightsSection, FooterSection, WhatsAppButton
-- `src/main.tsx` — Entrypoint, monta `<App />` en `#root`
-- `src/App.tsx` — BrowserRouter + Routes (`/` usa Index cinematic, otras páginas usan layout legacy)
+- `src/main.tsx` — Entrypoint, hidrata `<App />` en `#root`
+- `src/App.tsx` — `AppRoutes` (rutas + 404) envuelto en BrowserRouter; `src/entry-server.tsx` lo envuelve en StaticRouter para prerender
 - `src/index.css` — `@import "tailwindcss"` + `@theme` variables + animaciones
 
 ## Diseño (Home page)
