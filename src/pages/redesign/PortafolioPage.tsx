@@ -5,6 +5,8 @@ import { ArrowUpRight, ArrowRight, X, Check, ChevronLeft, ChevronRight } from 'l
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { usePageMeta } from '../../hooks/usePageMeta'
+import { Link } from 'react-router-dom'
+import { CASOS } from '../../content/casos'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -34,205 +36,26 @@ interface Project {
   liveUrl?:    string
 }
 
-const PROJECTS: Project[] = [
-  {
-    id: 'amq', title: 'AMQ Group', subtitle: 'Corporativo + CRM', category: 'web',
-    tags: ['React', 'TypeScript', 'CRM', 'SEO Local'], image: '/assets/amq-pag.png',
-    year: '2024', delivery: '18 días', industry: 'Construcción / Corporativo', featured: true,
-    description: 'Sitio corporativo multi-página con CRM integrado para gestión de leads, pipeline de proyectos y dashboard ejecutivo en tiempo real.',
-    challenge: 'AMQ operaba con Excel y WhatsApp sin sistema centralizado, perdiendo el 40% de sus leads por falta de seguimiento oportuno.',
-    solution: 'Desarrollamos un sitio de 6 páginas + CRM personalizado con pipeline Kanban, notificaciones automáticas por WhatsApp y reportes mensuales.',
-    metrics: [
-      { icon: '📈', label: 'Leads orgánicos',    value: '+340%' },
-      { icon: '🔍', label: 'Posición Google',    value: 'Top 3' },
-      { icon: '💰', label: 'Proyectos cotizados',value: '+55%'  },
-      { icon: '⏱',  label: 'Tiempo de entrega', value: '18 d'  },
-    ],
-    wa: waUrl('Hola, vi el proyecto AMQ Group en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
-  },
-  {
-    id: 'flyzz', title: 'FlyZZ Services', subtitle: 'Sistema POS + Web Corporativa', category: 'sistemas',
-    tags: ['POS', 'Dashboard', 'Inventario', 'React', 'Node.js'], image: '/assets/flyzz-pag.png',
-    year: '2024', delivery: '22 días', industry: 'Servicios / Comercio',
-    description: 'Sistema POS completo con inventario en tiempo real, facturación digital, reportes por turno y panel admin web con estadísticas de ventas.',
-    challenge: 'FlyZZ usaba caja registradora manual sin reportes. El dueño no sabía qué vendía más ni cuánto ganaba al mes, con diferencias de caja recurrentes.',
-    solution: 'POS táctil con impresión de tickets, módulo de inventario con alertas de stock mínimo, cierre de caja automático y dashboard web con acceso remoto.',
-    metrics: [
-      { icon: '⚡', label: 'Eficiencia operativa', value: '+200%' },
-      { icon: '📊', label: 'Errores en cobros',    value: '-95%'  },
-      { icon: '🕐', label: 'Tiempo cierre caja',   value: '-80%'  },
-      { icon: '📦', label: 'Diferencias inventario',value: '$0'   },
-    ],
-    wa: waUrl('Hola, vi el proyecto FlyZZ en el portafolio de Revolution505 y me interesa un sistema POS. ¿Podemos hablar?'),
-  },
-  {
-    id: 'spartan', title: 'Spartan TV', subtitle: 'Plataforma Streaming IPTV', category: 'sistemas',
-    tags: ['HLS.js', 'IPTV', 'Suscripciones', 'Panel Admin'], image: '/assets/spartan-pag.png',
-    year: '2024', delivery: '30 días', industry: 'Entretenimiento / IPTV', featured: true,
-    description: 'Plataforma de streaming con 500+ canales en vivo, VOD y series. Panel de administración para gestión de suscripciones, activaciones y facturación automática.',
-    challenge: 'El cliente distribuía IPTV por Telegram sin control de pagos ni usuarios activos, con acceso no controlado y pérdidas por cuentas compartidas.',
-    solution: 'Plataforma web con autenticación, gestión de suscripciones mensuales/anuales, player HLS integrado, panel admin y notificaciones de renovación por WhatsApp.',
-    metrics: [
-      { icon: '👥', label: 'Suscriptores activos', value: '500+'  },
-      { icon: '📺', label: 'Canales disponibles',  value: '500+'  },
-      { icon: '💳', label: 'Cobros automatizados', value: '100%'  },
-      { icon: '📉', label: 'Cancelaciones/mes',    value: '-60%'  },
-    ],
-    wa: waUrl('Hola, vi Spartan TV en el portafolio de Revolution505 y me interesa una plataforma de streaming. ¿Podemos hablar?'),
-  },
-  {
-    id: 'pena', title: 'Peña Abogados', subtitle: 'Despacho Legal + SEO Local', category: 'seo',
-    tags: ['SEO Local', 'Blog Legal', 'Schema Markup', 'WordPress'], image: '/assets/pena-pag.png',
-    year: '2024', delivery: '10 días', industry: 'Legal / Despacho',
-    description: 'Sitio para despacho de abogados en Querétaro con blog legal, SEO local agresivo, schema markup para abogados y formulario de consultas con WhatsApp.',
-    challenge: 'Peña Abogados no aparecía en Google. Sus competidores dominaban "abogado Querétaro" y el despacho dependía 100% de referidos.',
-    solution: 'Sitio optimizado con 15 artículos de blog legal, ficha de Google Business, schema markup de organización legal y link building local.',
-    metrics: [
-      { icon: '🔍', label: 'Posición Google QRO', value: 'Top 3'  },
-      { icon: '📞', label: 'Consultas mensuales',  value: '+80%'   },
-      { icon: '🌐', label: 'Tráfico orgánico',     value: '+220%'  },
-      { icon: '⭐', label: 'Calificación Google',  value: '4.9★'   },
-    ],
-    wa: waUrl('Hola, vi el proyecto Peña Abogados en el portafolio y me interesa SEO para mi negocio. ¿Podemos hablar?'),
-  },
-  {
-    id: 'devilish', title: 'Devilish Store', subtitle: 'Tienda E-commerce Premium', category: 'ecommerce',
-    tags: ['E-commerce', 'Stripe', 'Inventario', 'React', 'Node.js'], image: '/assets/devilish-pag.png',
-    year: '2023', delivery: '15 días', industry: 'Moda / Streetwear', featured: true,
-    description: 'Tienda en línea premium con catálogo de 200+ productos, carrito, Stripe Checkout, gestión de pedidos, inventario en tiempo real y panel admin.',
-    challenge: 'Devilish vendía solo por Instagram DM con pagos por transferencia. Sin historial de ventas, sin automatización y con pérdidas por pedidos no cobrados.',
-    solution: 'Tienda React + API REST propia con pasarela Stripe, manejo de tallas/colores, sistema de cupones, tracking de envíos y panel de pedidos para el equipo.',
-    metrics: [
-      { icon: '💰', label: 'Ventas primer año',     value: '$180K+' },
-      { icon: '🛒', label: 'Tasa de conversión',    value: '4.8%'   },
-      { icon: '📦', label: 'Pedidos automatizados', value: '100%'   },
-      { icon: '⭐', label: 'Satisfacción cliente',  value: '4.9★'   },
-    ],
-    wa: waUrl('Hola, vi Devilish Store en el portafolio de Revolution505 y me interesa una tienda en línea. ¿Podemos hablar?'),
-  },
-  {
-    id: 'atakgg', title: 'ATAK.GG', subtitle: 'Stats + torneos LoL', category: 'sistemas',
-    tags: ['Next.js', 'Riot API', 'Brackets', 'Live stats'], image: '/assets/atakgg.png',
-    year: '2025', delivery: 'Producto propio', industry: 'Esports / Gaming', featured: true,
-    liveUrl: 'https://atakgg.revolution505.com',
-    description: 'Plataforma propia de Revolution505: brackets, tabla y stats en vivo para torneos de League of Legends, con datos vía Riot Production API.',
-    challenge: 'Los organizadores locales dependían de herramientas genéricas sin stats profundas ni identidad propia para jugadores LATAM.',
-    solution: 'App web self-hosted (Coolify) con torneos, resumen, live stats y overlay companion. En producción: atakgg.revolution505.com.',
-    metrics: [
-      { icon: '🌐', label: 'URL live', value: 'atakgg.revolution505.com' },
-      { icon: '📡', label: 'API', value: 'Riot Production' },
-      { icon: '🖥️', label: 'Hosting', value: 'Coolify self-host' },
-      { icon: '🎮', label: 'Juego', value: 'League of Legends' },
-    ],
-    wa: waUrl('Hola, vi ATAK.GG en el portafolio de Revolution505 y me interesa una plataforma de torneos/stats. ¿Podemos hablar?'),
-  },
-  {
-    id: 'sonorarev', title: 'SonoraRev', subtitle: 'Reproductor de música', category: 'web',
-    tags: ['App web', 'Audio', 'Self-hosted'], image: '/assets/datacenter.jpg',
-    year: '2025', delivery: 'Producto propio', industry: 'Media / Producto',
-    liveUrl: 'https://sonorarev.com',
-    description: 'Producto propio del ecosistema Revolution505: app de reproducción de música (SonoraRev). Incluido en portafolio para mostrar alcance de producto, no como campaña de ads.',
-    challenge: 'Necesitábamos demostrar capacidad de producto digital completo más allá de landings de clientes.',
-    solution: 'App self-hosted en el dominio sonorarev, parte del stack open source de la empresa.',
-    metrics: [
-      { icon: '🎵', label: 'Tipo', value: 'Music player' },
-      { icon: '🔓', label: 'Stack', value: 'Open source' },
-      { icon: '🏢', label: 'Dueño', value: 'Revolution505' },
-      { icon: '🌎', label: 'Alcance', value: 'Producto propio' },
-    ],
-    wa: waUrl('Hola, vi SonoraRev en el portafolio de Revolution505 y me interesa una app de producto. ¿Podemos hablar?'),
-  },
-  {
-    id: 'nexus-dental', title: 'Nexus Dental', subtitle: 'Clínica + Reservas Online', category: 'web',
-    tags: ['Sistema Reservas', 'WhatsApp API', 'SEO Salud', 'React'], image: '/assets/restaurante-dashboard.png',
-    year: '2024', delivery: '12 días', industry: 'Salud / Odontología',
-    description: 'Sitio web para clínica dental con sistema de citas online, confirmaciones automáticas por WhatsApp, galería de casos clínicos y blog de salud bucal.',
-    challenge: 'La clínica recibía citas solo por teléfono. El 30% de las llamadas quedaban sin respuesta, perdiendo pacientes directamente con la competencia.',
-    solution: 'Sitio con calendario de citas integrado, recordatorios automáticos 24h antes, página de servicios con precios y galería de antes/después.',
-    metrics: [
-      { icon: '📅', label: 'Citas online/mes',    value: '+180%' },
-      { icon: '📞', label: 'Llamadas perdidas',   value: '-85%'  },
-      { icon: '👥', label: 'Pacientes nuevos',    value: '+55%'  },
-      { icon: '⭐', label: 'Google Reviews',      value: '4.8★'  },
-    ],
-    wa: waUrl('Hola, vi el proyecto Nexus Dental en el portafolio y me interesa algo similar para mi clínica. ¿Podemos hablar?'),
-  },
-  {
-    id: 'casaflex', title: 'CasaFlex Inmobiliaria', subtitle: 'Portal Inmobiliario + CRM', category: 'web',
-    tags: ['CRM', 'Mapa Interactivo', 'Leads', 'React'], image: '/assets/datacenter.jpg',
-    year: '2024', delivery: '20 días', industry: 'Inmobiliaria', featured: true,
-    description: 'Portal inmobiliario con búsqueda avanzada, mapa de propiedades, CRM para agentes, seguimiento de leads y notificaciones automáticas de nuevas propiedades.',
-    challenge: 'CasaFlex publicaba en OLX sin CRM ni seguimiento. Sus agentes perdían leads calientes por falta de seguimiento estructurado.',
-    solution: 'Portal con 150+ propiedades, CRM para 8 agentes con leads asignados automáticamente, alertas de propiedad nueva por WhatsApp y reportes semanales.',
-    metrics: [
-      { icon: '🏠', label: 'Propiedades publicadas', value: '150+'  },
-      { icon: '📋', label: 'Leads captados/mes',     value: '+240%' },
-      { icon: '🤝', label: 'Cierres de ventas',      value: '+40%'  },
-      { icon: '⏱',  label: 'Tiempo resp. lead',     value: '-90%'  },
-    ],
-    wa: waUrl('Hola, vi el proyecto CasaFlex en el portafolio de Revolution505 y me interesa un portal inmobiliario. ¿Podemos hablar?'),
-  },
-  {
-    id: 'lqc-pos', title: 'La Que Cura Farmacia', subtitle: 'POS + Control Medicamentos', category: 'sistemas',
-    tags: ['POS Farmacia', 'CFDI', 'Lotes', 'Caducidades'], image: '/assets/pos-lqc-interface.png',
-    year: '2024', delivery: '28 días', industry: 'Salud / Farmacia',
-    description: 'Sistema POS especializado para farmacia: control por lote y caducidad, facturación CFDI, alertas de stock mínimo e integración con distribuidores.',
-    challenge: 'La farmacia tenía pérdidas por medicamentos caducados no detectados y vendía productos sin stock real por descontrol de inventario.',
-    solution: 'POS con módulo de lotes y caducidades, alertas preventivas 30/60/90 días antes, facturación CFDI automática y órdenes de compra a proveedores.',
-    metrics: [
-      { icon: '💊', label: 'Productos controlados', value: '1,200+' },
-      { icon: '📋', label: 'Merma por caducidad',   value: '-92%'   },
-      { icon: '💳', label: 'Facturas CFDI',          value: '100%'   },
-      { icon: '⚡', label: 'Tiempo de cobro',        value: '-70%'   },
-    ],
-    wa: waUrl('Hola, vi el POS para farmacia en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
-  },
-  {
-    id: 'vitae', title: 'Vitae Nutrición', subtitle: 'E-commerce + Blog Nutricional', category: 'ecommerce',
-    tags: ['E-commerce', 'Blog SEO', 'Suscripciones', 'React'], image: '/assets/tecnico.jpg',
-    year: '2025', delivery: '14 días', industry: 'Salud / Nutrición',
-    description: 'Tienda en línea para marca de suplementos con suscripción mensual, blog nutricional con SEO, calculadora de macros interactiva y programa de referidos.',
-    challenge: 'Vitae vendía suplementos solo en ferias y redes sociales. Sin recurrencia de clientes ni canal digital propio que generara ventas pasivas.',
-    solution: 'Tienda con modelo freemium: compra única + suscripción mensual con descuento. Blog de 30 artículos con SEO nutricional y calculadora viral de macros.',
-    metrics: [
-      { icon: '🔄', label: 'Clientes recurrentes',   value: '68%'    },
-      { icon: '💰', label: 'Ventas mensuales',        value: '$45K+'  },
-      { icon: '🌐', label: 'Tráfico blog orgánico',   value: '+420%'  },
-      { icon: '📱', label: 'App calculator viral',    value: '2.1K↗'  },
-    ],
-    wa: waUrl('Hola, vi el proyecto Vitae Nutrición en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
-  },
-  {
-    id: 'cielito-resto', title: 'Cielito Restaurantes', subtitle: 'Sistema Mesas + Cocina + POS', category: 'sistemas',
-    tags: ['POS Restaurante', 'Cocina', 'Mesas', 'Meseros'], image: '/assets/restaurante-cobro.png',
-    year: '2025', delivery: '35 días', industry: 'Gastronomía / Restaurante',
-    description: 'Sistema integral para cadena de restaurantes: módulo de mesas táctil, pantalla de cocina, módulo de meseros en tablet y POS de caja con reportes de turno.',
-    challenge: 'La cadena tenía 3 sucursales con procesos distintos en cada una. Comandas en papel, confusiones en cocina y sin reportes consolidados por sucursal.',
-    solution: 'Sistema 4-en-1: tablet de meseros, pantalla de cocina KDS, POS de caja y panel gerencial web con estadísticas en tiempo real por sucursal.',
-    metrics: [
-      { icon: '🍽',  label: 'Mesas gestionadas',    value: '48'    },
-      { icon: '⚡', label: 'Tiempo de servicio',    value: '-35%'  },
-      { icon: '📊', label: 'Errores de comanda',    value: '-98%'  },
-      { icon: '💰', label: 'Ventas por sucursal',   value: '+22%'  },
-    ],
-    wa: waUrl('Hola, vi el sistema de restaurante en el portafolio de Revolution505 y me interesa algo similar. ¿Podemos hablar?'),
-  },
-  {
-    id: 'revolution-web', title: 'Revolution505.com', subtitle: 'Nuestro Propio Sitio', category: 'web',
-    tags: ['React 19', 'GSAP', 'Framer Motion', 'Tailwind v4', 'Vite 7'], image: '/assets/revolution-pag.png',
-    year: '2025', delivery: '45 días', industry: 'Agencia Digital', featured: true,
-    description: 'El sitio que estás viendo. Calculadora de precios, simulador de resultados por industria, configurador de proyectos y portafolio interactivo con modal.',
-    challenge: 'Superar a los competidores locales (BastianSoft, Pixyhub, Vexus) que carecen de herramientas interactivas y diseño premium de nivel internacional.',
-    solution: 'Landing de alto impacto con 10+ secciones, 3 herramientas interactivas únicas, animaciones GSAP + Framer Motion y diseño cinematográfico propio.',
-    metrics: [
-      { icon: '⚡', label: 'Lighthouse Score',      value: '98/100'  },
-      { icon: '🎯', label: 'Conversión visitantes', value: '12%'     },
-      { icon: '🔍', label: 'Posición Google',       value: 'Top 5'   },
-      { icon: '📱', label: 'Mobile Score',           value: '100/100' },
-    ],
-    wa: waUrl('Hola, quiero un sitio web como el de Revolution505. ¿Podemos hablar sobre mi proyecto?'),
-  },
-]
+// Datos: src/content/casos.ts (solo clientes autorizados y hechos verificables; sin métricas inventadas).
+const FACT_ICONS = ['🏷️', '📌', '🧩', '🌐']
+const PROJECTS: Project[] = CASOS.map((c, i) => ({
+  id:          c.slug,
+  title:       c.client.split(' — ')[0].split(' (')[0],
+  subtitle:    c.kind === 'propio' ? 'Proyecto propio' : 'Cliente',
+  category:    c.category,
+  tags:        c.stack.slice(0, 5),
+  image:       c.image,
+  year:        c.year ?? '',
+  delivery:    c.liveLabel,
+  industry:    c.sector,
+  description: c.summary,
+  challenge:   c.context,
+  solution:    c.built.slice(0, 3).join(' '),
+  metrics:     c.facts.map((f, j) => ({ ...f, icon: FACT_ICONS[j] ?? '•' })),
+  wa:          waUrl(c.waText),
+  featured:    i % 3 === 0,
+  liveUrl:     c.liveUrl,
+}))
 
 const FILTERS: { id: FilterType; label: string; emoji: string }[] = [
   { id: 'all',       label: 'Todos',      emoji: '🗂'  },
@@ -244,11 +67,11 @@ const FILTERS: { id: FilterType; label: string; emoji: string }[] = [
 
 // Floating card positions (for hero background)
 const FLOAT_CONFIG = [
-  { src: '/assets/amq-pag.png',      top: '8%',  left: '-2%',  delay: '0s',    anim: 'animate-float-up'   },
-  { src: '/assets/flyzz-pag.png',    top: '5%',  right: '-2%', delay: '1.5s',  anim: 'animate-float-down' },
-  { src: '/assets/devilish-pag.png', top: '55%', left: '-3%',  delay: '3s',    anim: 'animate-float-down' },
-  { src: '/assets/spartan-pag.png',  top: '60%', right: '-3%', delay: '2.2s',  anim: 'animate-float-up'   },
-  { src: '/assets/pena-pag.png',     top: '30%', right: '-4%', delay: '0.8s',  anim: 'animate-drift-x'    },
+  { src: '/assets/casos/amq-capacitaciones.jpg',  top: '8%',  left: '-2%',  delay: '0s',   anim: 'animate-float-up'   },
+  { src: '/assets/casos/flyzz.jpg',               top: '5%',  right: '-2%', delay: '1.5s', anim: 'animate-float-down' },
+  { src: '/assets/casos/corporativo-rios.jpg',    top: '55%', left: '-3%',  delay: '3s',   anim: 'animate-float-down' },
+  { src: '/assets/casos/atak-gg.jpg',             top: '60%', right: '-3%', delay: '2.2s', anim: 'animate-float-up'   },
+  { src: '/assets/casos/la-pena-de-santiago.jpg', top: '30%', right: '-4%', delay: '0.8s', anim: 'animate-drift-x'    },
 ]
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -325,7 +148,7 @@ function ProjectModal({ project, onClose, onPrev, onNext, hasPrev, hasNext }: {
               {project.category}
             </span>
             <span className="px-2.5 py-1 rounded-full bg-bg/70 backdrop-blur-sm border border-stroke/50 text-[10px] text-muted">
-              {project.year} · {project.delivery}
+              {[project.year, project.delivery].filter(Boolean).join(' · ')}
             </span>
           </div>
         </div>
@@ -350,7 +173,7 @@ function ProjectModal({ project, onClose, onPrev, onNext, hasPrev, hasNext }: {
                 className="bg-bg border border-stroke rounded-2xl p-3 sm:p-4 text-center"
               >
                 <p className="text-xl mb-1" aria-hidden>{m.icon}</p>
-                <p className="text-xl sm:text-2xl font-display italic accent-gradient-text leading-none">{m.value}</p>
+                <p className="text-base sm:text-lg font-display italic accent-gradient-text leading-tight">{m.value}</p>
                 <p className="text-[10px] text-muted mt-1.5 leading-tight">{m.label}</p>
               </motion.div>
             ))}
@@ -402,12 +225,12 @@ function ProjectModal({ project, onClose, onPrev, onNext, hasPrev, hasNext }: {
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </span>
             </a>
-            <button
-              onClick={onClose}
-              className="sm:w-auto px-6 py-3 rounded-full border border-stroke text-sm text-muted hover:text-text-primary hover:border-accent/40 transition-all duration-200"
+            <Link
+              to={`/portafolio/${project.id}`}
+              className="sm:w-auto px-6 py-3 rounded-full border border-stroke text-sm text-center text-muted hover:text-text-primary hover:border-accent/40 transition-all duration-200"
             >
-              Ver más proyectos
-            </button>
+              Ver caso completo
+            </Link>
           </div>
         </div>
       </motion.div>
@@ -565,7 +388,7 @@ function PortafolioHero() {
           transition={{ duration: 0.6, delay: 0.38 }}
           className="text-sm md:text-base text-muted max-w-lg mx-auto mb-8 leading-relaxed"
         >
-          12 proyectos reales. Resultados medibles. Sin promesas vacías — solo evidencia.
+          Proyectos reales, con enlace al sitio en vivo. Sin métricas infladas: solo lo que construimos.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -664,10 +487,10 @@ export default function PortafolioPage() {
         {/* Stats strip */}
         <div className="port-stats grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
           {[
-            { value: '12',   label: 'Proyectos entregados' },
-            { value: '100%', label: 'Clientes satisfechos' },
-            { value: '14d',  label: 'Entrega promedio'     },
-            { value: '4',    label: 'Categorías de servicio' },
+            { value: String(CASOS.length), label: 'Casos publicados' },
+            { value: String(CASOS.filter(c => c.kind === 'cliente').length), label: 'Sitios de clientes en vivo' },
+            { value: String(CASOS.filter(c => c.kind === 'propio').length), label: 'Productos propios' },
+            { value: 'QRO', label: 'Base de operación' },
           ].map(stat => (
             <div key={stat.label} className="p-4 rounded-2xl border border-stroke/60 bg-surface/30 text-center">
               <p className="text-2xl font-display italic accent-gradient-text">{stat.value}</p>
@@ -678,7 +501,7 @@ export default function PortafolioPage() {
 
         {/* Filters */}
         <div className="port-filter flex flex-wrap items-center gap-2 mb-8">
-          {FILTERS.map(({ id, label, emoji }) => {
+          {FILTERS.filter(f => f.id === 'all' || PROJECTS.some(p => p.category === f.id)).map(({ id, label, emoji }) => {
             const count  = id === 'all' ? PROJECTS.length : PROJECTS.filter(p => p.category === id).length
             const active = filter === id
             return (
@@ -725,6 +548,27 @@ export default function PortafolioPage() {
             </AnimatePresence>
           </motion.div>
         </LayoutGroup>
+
+        {/* Enlaces rastreables a cada caso (el grid abre un modal) */}
+        <nav aria-label="Casos de estudio" className="mt-12">
+          <h2 className="text-xs text-muted uppercase tracking-[0.3em] mb-4">Casos de estudio completos</h2>
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {CASOS.map(c => (
+              <li key={c.slug}>
+                <Link
+                  to={`/portafolio/${c.slug}`}
+                  className="flex items-center justify-between gap-3 p-4 rounded-2xl border border-stroke/60 bg-surface/30 text-sm text-text-primary hover:border-accent/40 transition-colors"
+                >
+                  <span>
+                    <span className="block font-semibold">{c.client.split(' — ')[0]}</span>
+                    <span className="block text-xs text-muted mt-0.5">{c.sector}</span>
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-muted flex-shrink-0" aria-hidden />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
         {/* CTA band */}
         <motion.div
