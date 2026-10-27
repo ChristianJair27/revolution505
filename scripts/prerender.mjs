@@ -3,12 +3,14 @@
 //
 // Salida:
 //   dist/index.html        → /
-//   dist/<ruta>.html       → /<ruta>   (.htaccess sirve /precios desde precios.html, sin "/" final)
+//   dist/<ruta>.html       → /<ruta>   (.htaccess sirve /precios desde precios.html, sin "/" final;
+//                                      /portafolio/flyzz → dist/portafolio/flyzz.html)
+//   Cada HTML lleva <html lang>, hreflang (si la ruta tiene equivalente en el otro idioma) y su JSON-LD.
 //   dist/404.html          → ErrorDocument 404 (noindex)
 //   dist/sitemap.xml       → rutas de src/seo/routes.ts con <lastmod> del último commit de su fuente
 import { execFileSync } from 'node:child_process'
-import { readFileSync, rmSync, writeFileSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 const root = resolve(import.meta.dirname, '..')
@@ -30,8 +32,26 @@ function setMeta(html, attr, key, value) {
   return html.replace(re, `<meta ${attr}="${key}" content="${escapeAttr(value)}" />`)
 }
 
-function buildPage({ appHtml, title, description, url, image, noindex }) {
+/** <link rel="alternate" hreflang> entre una ruta y su equivalente en el otro idioma (x-default = español). */
+function hreflangLinks(route) {
+  if (!route?.alternate) return []
+  const es = route.lang === 'en' ? route.alternate : route.path
+  const en = route.lang === 'en' ? route.path : route.alternate
+  return [
+    { lang: 'es-MX', href: canonicalUrl(es) },
+    { lang: 'en', href: canonicalUrl(en) },
+    { lang: 'x-default', href: canonicalUrl(es) },
+  ]
+}
+
+function buildPage({ appHtml, title, description, url, image, noindex, route }) {
   let html = template
+  const lang = route?.lang ?? 'es'
+  if (!/<html lang="es">/.test(html)) throw new Error('index.html no tiene <html lang="es">')
+  html = html.replace('<html lang="es">', `<html lang="${lang}">`)
+  if (lang === 'en') {
+    html = setMeta(html, 'property', 'og:locale', 'en_US')
+  }
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeText(title)}</title>`)
   html = setMeta(html, 'name', 'title', title)
   html = setMeta(html, 'name', 'description', description)
@@ -51,6 +71,13 @@ function buildPage({ appHtml, title, description, url, image, noindex }) {
     html = html.replace(canonicalRe, '')
   }
 
+  const head = [
+    ...hreflangLinks(route).map((l) => `<link rel="alternate" hreflang="${l.lang}" href="${escapeAttr(l.href)}" />`),
+    // "<" escapado para que ningún texto del JSON pueda cerrar el <script>.
+    ...(route?.jsonLd ? [`<script type="application/ld+json">${JSON.stringify(route.jsonLd).replace(/</g, '\\u003c')}</script>`] : []),
+  ]
+  if (head.length) html = html.replace('</head>', () => `    ${head.join('\n    ')}\n  </head>`)
+
   if (!html.includes('<div id="root"></div>')) throw new Error('index.html no tiene <div id="root"></div>')
   return html.replace('<div id="root"></div>', () => `<div id="root">${appHtml}</div>`)
 }
@@ -67,6 +94,7 @@ function lastmod(sources) {
 
 for (const route of routes) {
   const file = route.path === '/' ? 'index.html' : `${route.path.slice(1)}.html`
+  mkdirSync(dirname(resolve(dist, file)), { recursive: true })
   const html = buildPage({
     appHtml: render(route.path),
     title: fullTitle(route),
@@ -74,9 +102,10 @@ for (const route of routes) {
     url: canonicalUrl(route.path),
     image: route.ogImage ?? DEFAULT_OG_IMAGE,
     noindex: false,
+    route,
   })
   writeFileSync(resolve(dist, file), html)
-  console.log(`prerender  ${route.path.padEnd(14)} → dist/${file}`)
+  console.log(`prerender  ${route.path.padEnd(40)} → dist/${file}`)
 }
 
 writeFileSync(
@@ -90,7 +119,7 @@ writeFileSync(
     noindex: true,
   }),
 )
-console.log('prerender  404            → dist/404.html')
+console.log(`prerender  ${'404'.padEnd(40)} → dist/404.html`)
 
 const urls = routes
   .map(
@@ -98,13 +127,16 @@ const urls = routes
     <loc>${canonicalUrl(r.path)}</loc>
     <lastmod>${lastmod(r.sources)}</lastmod>
     <changefreq>${r.changefreq}</changefreq>
-    <priority>${r.priority.toFixed(1)}</priority>
+    <priority>${r.priority.toFixed(1)}</priority>${hreflangLinks(r)
+      .map((l) => `
+    <xhtml:link rel="alternate" hreflang="${l.lang}" href="${l.href}" />`)
+      .join('')}
   </url>`,
   )
   .join('\n')
 writeFileSync(
   resolve(dist, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls}\n</urlset>\n`,
 )
 console.log(`sitemap    ${routes.length} URLs   → dist/sitemap.xml`)
 
