@@ -23,17 +23,18 @@ export default function HeroSection() {
 
   /* ── Video HLS de fondo ──
      Es decorativo: el titular prerenderizado es el LCP y se ve desde el primer pintado.
-     El video arranca hasta que la página terminó de cargar y el navegador está libre,
-     solo en pantallas ≥ 768 px y sin "ahorro de datos" ni "reducir movimiento".
-     En móvil queda el gradiente (.cosmic-gradient). hls.js (~160 KB gzip) se importa
-     dinámicamente. */
+     Escritorio: arranca cuando la página terminó de cargar y el navegador está libre.
+     Móvil (< 768 px): arranca con el primer toque, scroll o tecla. Si arrancara solo, su
+     primer cuadro pasaría a ser el LCP (~11 s en Lighthouse móvil); Google deja de medir
+     LCP en la primera interacción. Calidad limitada al tamaño de pantalla.
+     Con "ahorro de datos", red 2G o "reducir movimiento" queda el gradiente
+     (.cosmic-gradient). hls.js (~160 KB gzip) se importa dinámicamente. */
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
     const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
     const skip =
-      !window.matchMedia('(min-width: 768px)').matches ||
       window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
       conn?.saveData === true ||
       /(^|-)2g$/.test(conn?.effectiveType ?? '')
@@ -67,7 +68,7 @@ export default function HeroSection() {
           playNative()
           return
         }
-        hls = new Hls({ lowLatencyMode: false, startLevel: -1 })
+        hls = new Hls({ lowLatencyMode: false, startLevel: 0, capLevelToPlayerSize: true })
         hls.loadSource(HLS_SRC)
         hls.attachMedia(video)
         hls.on(Hls.Events.MANIFEST_PARSED, play)
@@ -80,12 +81,21 @@ export default function HeroSection() {
         : setTimeout(start, 1500)
     }
 
-    if (document.readyState === 'complete') schedule()
+    const INTERACTION = ['pointerdown', 'touchstart', 'scroll', 'keydown'] as const
+    const onInteraction = () => {
+      INTERACTION.forEach((e) => window.removeEventListener(e, onInteraction))
+      schedule()
+    }
+    const isMobile = !window.matchMedia('(min-width: 768px)').matches
+
+    if (isMobile) INTERACTION.forEach((e) => window.addEventListener(e, onInteraction, { once: true, passive: true }))
+    else if (document.readyState === 'complete') schedule()
     else window.addEventListener('load', schedule, { once: true })
 
     return () => {
       cancelled = true
       window.removeEventListener('load', schedule)
+      INTERACTION.forEach((e) => window.removeEventListener(e, onInteraction))
       if (idleId !== undefined) {
         if (typeof window.cancelIdleCallback === 'function') window.cancelIdleCallback(idleId)
         else clearTimeout(idleId)

@@ -48,7 +48,7 @@ Sitio web corporativo SPA para Revolution505 Tech Solutions (desarrollo web, sis
 - **Fuentes**: `Inter` (body) + `Instrument Serif` (display, italic)
 - **Tailwind v4** — Tema definido vía `@theme` en CSS; no usar `tailwind.config.js` (vestigial)
 - **Navbar** — Pill glassmorphism fijo, logo con ring accent gradient
-- **Hero** — Full viewport, video HLS de fondo (solo ≥ 768 px, después del evento load), headline gigante, role cycling
+- **Hero** — Full viewport, video HLS de fondo (después del evento load), headline gigante, role cycling
 - **Precios** — 3 planes ($6,500 / $12,500 / $22,500 MXN) con WhatsApp CTA directo
 - **WhatsApp flotante** — Botón fijo en toda la app
 
@@ -64,7 +64,7 @@ Sitio web corporativo SPA para Revolution505 Tech Solutions (desarrollo web, sis
 - **Ruteo** — `/` usa el diseño nuevo cinematográfico. Las páginas `/portafolio`, `/clientes`, `/blog`, `/contacto` usan el diseño legacy (Header/Footer viejos).
 - **Alias de imports** — No hay alias configurados; usar imports relativos.
 - **tailwind.config.js** — Vestigial de v3. Las animaciones que tiene están duplicadas en `index.css`.
-- **HLS video** — Stream de Mux en `HeroSection`. Arranca después de `load` + idle, solo en pantallas ≥ 768 px y sin ahorro de datos / reducir movimiento; si no, queda el gradiente.
+- **HLS video** — Stream de Mux en `HeroSection`. Escritorio: arranca después de `load` + idle. Móvil: con la primera interacción (si no, su primer cuadro se vuelve el LCP). Con ahorro de datos, 2G o reducir movimiento queda el gradiente.
 
 ## Performance (rama perf)
 

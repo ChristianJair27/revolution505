@@ -39,16 +39,12 @@ test('tracking: GA4 y Meta Pixel se cargan después del evento load', async ({ p
   expect(await page.evaluate(() => Array.isArray(window.dataLayer) && typeof window.fbq === 'function')).toBe(true)
 })
 
-test('home: sin imágenes pesadas ni video en móvil', async ({ page, isMobile }) => {
+test('home: sin imágenes pesadas', async ({ page }) => {
   const heavy: string[] = []
-  const requested: string[] = []
   page.on('response', async (res) => {
-    const url = res.url()
-    requested.push(url)
-    if (res.request().resourceType() === 'image') {
-      const len = Number(res.headers()['content-length'] ?? (await res.body().catch(() => Buffer.alloc(0))).length)
-      if (len > 200 * 1024) heavy.push(`${url} ${Math.round(len / 1024)} KB`)
-    }
+    if (res.request().resourceType() !== 'image') return
+    const len = Number(res.headers()['content-length'] ?? (await res.body().catch(() => Buffer.alloc(0))).length)
+    if (len > 200 * 1024) heavy.push(`${res.url()} ${Math.round(len / 1024)} KB`)
   })
   await page.route(/googletagmanager|facebook|stream\.mux\.com/, (r) => r.abort())
   await page.goto('/')
@@ -56,7 +52,30 @@ test('home: sin imágenes pesadas ni video en móvil', async ({ page, isMobile }
   await page.mouse.wheel(0, 20000)
   await page.waitForTimeout(800)
   expect(heavy).toEqual([])
-  if (isMobile) {
-    expect(requested.filter((u) => /vendor-hls|stream\.mux\.com/.test(u))).toEqual([])
+})
+
+test('video del hero en móvil: arranca con la primera interacción, nunca con "reducir movimiento"', async ({ browser }) => {
+  for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+    const ctx = await browser.newContext({ reducedMotion, viewport: { width: 390, height: 844 } })
+    const page = await ctx.newPage()
+    await page.route(/googletagmanager|facebook|stream\.mux\.com/, (r) => r.abort())
+    await page.goto('http://127.0.0.1:8899/')
+    await page.waitForLoadState('load')
+    // Momento en que se pidió hls.js vs. fin del evento load (mismo reloj del navegador).
+    const timing = () => page.evaluate(() => ({
+      hls: performance.getEntriesByType('resource').find((e) => e.name.includes('vendor-hls'))?.startTime ?? 0,
+      load: (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming).loadEventEnd,
+    }))
+    // Sin interacción no se descarga nada (no compite con el LCP).
+    await page.waitForTimeout(3500)
+    expect((await timing()).hls, 'sin interacción: sin video').toBe(0)
+    await page.mouse.wheel(0, 200)
+    if (reducedMotion === 'reduce') {
+      await page.waitForTimeout(4000)
+      expect((await timing()).hls, 'reduce: sin video').toBe(0)
+    } else {
+      await expect.poll(async () => (await timing()).hls, { timeout: 6000 }).toBeGreaterThan(0)
+    }
+    await ctx.close()
   }
 })
