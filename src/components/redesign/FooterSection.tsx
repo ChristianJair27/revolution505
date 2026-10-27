@@ -15,12 +15,12 @@ const FOOTER_COLS = [
   {
     title: 'Servicios',
     links: [
-      { label: 'Desarrollo Web',      href: '/portafolio', isRoute: true  },
-      { label: 'Sistemas POS',        href: '/sistemas',   isRoute: true  },
-      { label: 'CRM Empresarial',     href: '/sistemas',   isRoute: true  },
-      { label: 'Sistema de Reservas', href: '/sistemas',   isRoute: true  },
-      { label: 'Tiendas Online',      href: '/#calculadora', isRoute: false },
-      { label: 'SEO Local',           href: '/portafolio', isRoute: true  },
+      { label: 'Desarrollo Web Querétaro', href: '/desarrollo-web-queretaro',      isRoute: true },
+      { label: 'Páginas para Consultorios', href: '/paginas-web-para-consultorios', isRoute: true },
+      { label: 'Sistemas POS',             href: '/sistemas-pos',                  isRoute: true },
+      { label: 'Hosting y Mantenimiento',  href: '/hosting-y-administracion-web',  isRoute: true },
+      { label: 'Soporte IT Querétaro',     href: '/soporte-it-queretaro',          isRoute: true },
+      { label: 'English',                  href: '/en',                            isRoute: true },
     ],
   },
   {
@@ -303,9 +303,9 @@ export default function FooterSection() {
           {/* Link columns */}
           {FOOTER_COLS.map(col => (
             <div key={col.title}>
-              <h4 className="text-[10px] text-text-primary font-semibold uppercase tracking-[0.18em] mb-4">
+              <h3 className="text-[10px] text-text-primary font-semibold uppercase tracking-[0.18em] mb-4">
                 {col.title}
-              </h4>
+              </h3>
               <ul className="space-y-2.5">
                 {col.links.map(link => (
                   <li key={link.label}>

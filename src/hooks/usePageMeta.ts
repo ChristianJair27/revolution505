@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { DEFAULT_OG_IMAGE, NOT_FOUND_META, SITE_NAME, canonicalUrl, fullTitle, getRoute } from '../seo/routes'
+import type { RouteMeta } from '../seo/routes'
 
 // El HTML inicial de cada ruta ya trae su <head> correcto (scripts/prerender.mjs).
 // Este hook solo lo mantiene sincronizado al navegar dentro de la SPA.
@@ -28,6 +29,21 @@ function setLink(rel: string, href: string | null) {
   el.href = href
 }
 
+/** Sustituye los <link rel="alternate" hreflang> por los de la ruta actual (mismo criterio que prerender.mjs). */
+function setHreflang(route: RouteMeta | undefined) {
+  document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove())
+  if (!route?.alternate) return
+  const es = route.lang === 'en' ? route.alternate : route.path
+  const en = route.lang === 'en' ? route.path : route.alternate
+  for (const [lang, path] of [['es-MX', es], ['en', en], ['x-default', es]]) {
+    const el = document.createElement('link')
+    el.rel = 'alternate'
+    el.hreflang = lang
+    el.href = canonicalUrl(path)
+    document.head.appendChild(el)
+  }
+}
+
 /** Aplica el SEO de una ruta definida en src/seo/routes.ts. `null` = página 404. */
 export function usePageMeta(path: string | null) {
   useEffect(() => {
@@ -38,6 +54,9 @@ export function usePageMeta(path: string | null) {
     const image = route?.ogImage ?? DEFAULT_OG_IMAGE
 
     document.title = title
+    document.documentElement.lang = route?.lang ?? 'es'
+    setMeta('meta[property="og:locale"]', 'property', 'og:locale', route?.lang === 'en' ? 'en_US' : 'es_MX')
+    setHreflang(route)
     setMeta('meta[name="title"]', 'name', 'title', title)
     setMeta('meta[name="description"]', 'name', 'description', description)
     setMeta('meta[name="robots"]', 'name', 'robots', route ? 'index, follow' : 'noindex, follow')

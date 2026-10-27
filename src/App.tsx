@@ -13,6 +13,10 @@ import PreciosPage    from './pages/redesign/PreciosPage'
 import ProcesoPag     from './pages/redesign/ProcesoPag'
 import ContactoPage   from './pages/redesign/ContactoPage'
 import NotFoundPage   from './pages/redesign/NotFoundPage'
+import LandingPage    from './pages/redesign/LandingPage'
+import CasoPage       from './pages/redesign/CasoPage'
+import { LANDINGS_ES, LANDINGS_EN } from './content/landings'
+import { CASOS }      from './content/casos'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Google Ads: registra page view en cada cambio de ruta (SPA)
@@ -74,6 +78,21 @@ export function AppRoutes() {
         <Route path="/precios"    element={<Shell><PreciosPage /></Shell>}     />
         <Route path="/proceso"    element={<Shell><ProcesoPag /></Shell>}      />
         <Route path="/contacto"   element={<Shell><ContactoPage /></Shell>}    />
+
+        {/* Landings de servicio en español (src/content/landings.ts) */}
+        {LANDINGS_ES.map(l => (
+          <Route key={l.path} path={l.path} element={<Shell><LandingPage landing={l} /></Shell>} />
+        ))}
+
+        {/* Páginas en inglés: header/footer propios en inglés, sin precios */}
+        {LANDINGS_EN.map(l => (
+          <Route key={l.path} path={l.path} element={<LandingPage landing={l} />} />
+        ))}
+
+        {/* Casos de estudio (src/content/casos.ts) */}
+        {CASOS.map(c => (
+          <Route key={c.slug} path={`/portafolio/${c.slug}`} element={<Shell><CasoPage caso={c} /></Shell>} />
+        ))}
 
         {/* 404 — prerenderizado como dist/404.html */}
         <Route path="*"           element={<Shell><NotFoundPage /></Shell>}    />

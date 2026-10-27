@@ -29,6 +29,8 @@ Sitio web corporativo SPA para Revolution505 Tech Solutions (desarrollo web, sis
 - `npm run build` genera `dist/index.html`, `dist/<ruta>.html`, `dist/404.html` (noindex) y `dist/sitemap.xml` (lastmod = último commit de la fuente). `public/sitemap.xml` ya no existe.
 - `main.tsx` hidrata (`hydrateRoot`) el HTML prerenderizado. Nada de `window`/`document`/`Math.random` durante el render: solo en `useEffect`/handlers, o la hidratación falla.
 - `public/.htaccess`: sin fallback SPA → URLs inexistentes dan **404 real**; `/ruta/` y `/ruta.html` redirigen 301 a `/ruta`.
+- **Contenido (rama seo-v2-content)**: landings de servicio ES/EN en `src/content/landings.ts` y casos de estudio en `src/content/casos.ts`. `routes.ts` genera sus rutas, JSON-LD (`src/seo/schema.ts`), `<html lang>` y hreflang; `App.tsx` las monta con `LandingPage` / `CasoPage`. Landing nueva = una entrada en `landings.ts` (nada más).
+- Casos y portafolio: **solo clientes autorizados y hechos verificables** (sitio en vivo o repo). Sin métricas ni testimonios inventados. Páginas EN: sin precios.
 - Tracking: IDs y labels de Ads en `.env` (valores públicos) → `src/config/tracking.ts`; eventos en `src/lib/gtag.ts` (`generate_lead`, `whatsapp_click`, `phone_click`, `email_click`).
 
 ## Arquitectura

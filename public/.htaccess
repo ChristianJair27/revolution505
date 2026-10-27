@@ -14,8 +14,8 @@ RewriteCond %{THE_REQUEST} \s/+([^\s?]+?)\.html[\s?] [NC]
 RewriteCond %1 !^404$
 RewriteRule ^ /%1 [R=301,L]
 
-# /precios/ → /precios   (sin barra final; la home "/" no se toca)
-RewriteCond %{REQUEST_FILENAME} !-d
+# /precios/ → /precios   (sin barra final; la home "/" no se toca).
+# También /en/ y /portafolio/ aunque existan como carpeta: ninguna carpeta tiene index.html.
 RewriteRule ^(.+)/$ /$1 [R=301,L]
 
 # Archivos reales (assets, api/*.php, robots, sitemap) se sirven tal cual
