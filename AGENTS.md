@@ -64,7 +64,7 @@ Sitio web corporativo SPA para Revolution505 Tech Solutions (desarrollo web, sis
 - **Ruteo** — `/` usa el diseño nuevo cinematográfico. Las páginas `/portafolio`, `/clientes`, `/blog`, `/contacto` usan el diseño legacy (Header/Footer viejos).
 - **Alias de imports** — No hay alias configurados; usar imports relativos.
 - **tailwind.config.js** — Vestigial de v3. Las animaciones que tiene están duplicadas en `index.css`.
-- **HLS video** — Stream de Mux en `HeroSection`. Escritorio: arranca después de `load` + idle. Móvil: con la primera interacción (si no, su primer cuadro se vuelve el LCP). Con ahorro de datos, 2G o reducir movimiento queda el gradiente.
+- **HLS video** — Stream de Mux en `HeroSection`. Arranca solo después de `load` + idle, en escritorio y móvil (en móvil su primer cuadro se vuelve el LCP; aceptado por Christian). Con ahorro de datos, 2G o reducir movimiento queda el gradiente.
 
 ## Performance (rama perf)
 

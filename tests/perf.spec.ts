@@ -54,7 +54,7 @@ test('home: sin imágenes pesadas', async ({ page }) => {
   expect(heavy).toEqual([])
 })
 
-test('video del hero en móvil: arranca con la primera interacción, nunca con "reducir movimiento"', async ({ browser }) => {
+test('video del hero en móvil: arranca solo después de load, nunca con "reducir movimiento"', async ({ browser }) => {
   for (const reducedMotion of ['no-preference', 'reduce'] as const) {
     const ctx = await browser.newContext({ reducedMotion, viewport: { width: 390, height: 844 } })
     const page = await ctx.newPage()
@@ -66,15 +66,14 @@ test('video del hero en móvil: arranca con la primera interacción, nunca con "
       hls: performance.getEntriesByType('resource').find((e) => e.name.includes('vendor-hls'))?.startTime ?? 0,
       load: (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming).loadEventEnd,
     }))
-    // Sin interacción no se descarga nada (no compite con el LCP).
-    await page.waitForTimeout(3500)
-    expect((await timing()).hls, 'sin interacción: sin video').toBe(0)
-    await page.mouse.wheel(0, 200)
+    // Sin interacción: arranca solo, pero nunca antes del evento load.
     if (reducedMotion === 'reduce') {
       await page.waitForTimeout(4000)
       expect((await timing()).hls, 'reduce: sin video').toBe(0)
     } else {
       await expect.poll(async () => (await timing()).hls, { timeout: 6000 }).toBeGreaterThan(0)
+      const t = await timing()
+      expect(t.hls, 'hls.js después de load').toBeGreaterThanOrEqual(t.load)
     }
     await ctx.close()
   }

@@ -23,10 +23,9 @@ export default function HeroSection() {
 
   /* ── Video HLS de fondo ──
      Es decorativo: el titular prerenderizado es el LCP y se ve desde el primer pintado.
-     Escritorio: arranca cuando la página terminó de cargar y el navegador está libre.
-     Móvil (< 768 px): arranca con el primer toque, scroll o tecla. Si arrancara solo, su
-     primer cuadro pasaría a ser el LCP (~11 s en Lighthouse móvil); Google deja de medir
-     LCP en la primera interacción. Calidad limitada al tamaño de pantalla.
+     Arranca solo (escritorio y móvil) cuando la página terminó de cargar y el navegador
+     está libre. Decisión de Christian: en móvil su primer cuadro pasa a ser el LCP
+     (~11 s en Lighthouse móvil). Calidad limitada al tamaño de pantalla.
      Con "ahorro de datos", red 2G o "reducir movimiento" queda el gradiente
      (.cosmic-gradient). hls.js (~160 KB gzip) se importa dinámicamente. */
   useEffect(() => {
@@ -81,21 +80,12 @@ export default function HeroSection() {
         : setTimeout(start, 1500)
     }
 
-    const INTERACTION = ['pointerdown', 'touchstart', 'scroll', 'keydown'] as const
-    const onInteraction = () => {
-      INTERACTION.forEach((e) => window.removeEventListener(e, onInteraction))
-      schedule()
-    }
-    const isMobile = !window.matchMedia('(min-width: 768px)').matches
-
-    if (isMobile) INTERACTION.forEach((e) => window.addEventListener(e, onInteraction, { once: true, passive: true }))
-    else if (document.readyState === 'complete') schedule()
+    if (document.readyState === 'complete') schedule()
     else window.addEventListener('load', schedule, { once: true })
 
     return () => {
       cancelled = true
       window.removeEventListener('load', schedule)
-      INTERACTION.forEach((e) => window.removeEventListener(e, onInteraction))
       if (idleId !== undefined) {
         if (typeof window.cancelIdleCallback === 'function') window.cancelIdleCallback(idleId)
         else clearTimeout(idleId)
