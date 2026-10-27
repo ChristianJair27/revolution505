@@ -2,10 +2,8 @@ import { useRef, useEffect, useState } from 'react'
 import { WA } from '../../constants/whatsapp'
 import { motion, useInView } from 'framer-motion'
 import { Star } from 'lucide-react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { withGsap } from '../../lib/gsap'
 
-gsap.registerPlugin(ScrollTrigger)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // useCounter — smooth animated number from 0 → target when enabled
@@ -51,7 +49,7 @@ const TESTIMONIALS = [
     name:        'Alejandro Suárez',
     role:        'Director General',
     company:     'AMQ Group',
-    logo:        '/assets/amq-logo.png',
+    logo:        '/assets/amq-logo.webp',
     quote:       'Revolution505 transformó completamente nuestra presencia digital. En los primeros 3 meses duplicamos los leads desde la web. Su equipo entiende el negocio, no solo el código.',
     metric:      '+340%',
     metricLabel: 'leads orgánicos',
@@ -62,7 +60,7 @@ const TESTIMONIALS = [
     name:        'Regina Romero',
     role:        'CEO & Fundadora',
     company:     'FlyZZ Services',
-    logo:        '/assets/FLYZZ-logo.png',
+    logo:        '/assets/FLYZZ-logo.webp',
     quote:       'El sistema POS que nos desarrollaron cambió completamente nuestra operación diaria. Ahora procesamos el doble en el mismo tiempo. Comunicación constante y resultados reales.',
     metric:      '+200%',
     metricLabel: 'eficiencia operativa',
@@ -157,6 +155,10 @@ function TestimonialCard({ t, index }: CardProps) {
             src={t.logo}
             alt={t.company}
             className="w-10 h-10 rounded-xl object-contain bg-bg border border-stroke p-1 flex-shrink-0"
+            width={40}
+            height={40}
+            loading="lazy"
+            decoding="async"
           />
         ) : (
           <div className="w-10 h-10 rounded-xl bg-surface border border-stroke flex items-center justify-center flex-shrink-0">
@@ -212,13 +214,12 @@ export default function TestimoniosSection() {
 
   // GSAP ScrollTrigger for section header
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    return withGsap((gsap) => {
       gsap.from('.test-header', {
         opacity: 0, y: 24, duration: 0.7, ease: 'power3.out',
         scrollTrigger: { trigger: sectionRef.current, start: 'top 78%', once: true },
       })
     }, sectionRef)
-    return () => ctx.revert()
   }, [])
 
   return (

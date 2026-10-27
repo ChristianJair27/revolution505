@@ -2,10 +2,8 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { withGsap } from '../../lib/gsap'
 
-gsap.registerPlugin(ScrollTrigger)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types & data
@@ -32,7 +30,7 @@ const PROJECTS: Project[] = [
     title:       'AMQ Group',
     subtitle:    'Corporativo + CRM',
     category:    'web',
-    image:       '/assets/amq-pag.png',
+    image:       '/assets/amq-pag.webp',
     tags:        ['React', 'TypeScript', 'CRM', 'SEO'],
     result:      '+340% leads orgánicos',
     duration:    '18 días',
@@ -44,7 +42,7 @@ const PROJECTS: Project[] = [
     title:       'FlyZZ Services',
     subtitle:    'Sistema POS + Web',
     category:    'sistemas',
-    image:       '/assets/flyzz-pag.png',
+    image:       '/assets/flyzz-pag.webp',
     tags:        ['POS', 'Dashboard', 'E-commerce'],
     result:      '+200% eficiencia operativa',
     duration:    '22 días',
@@ -56,7 +54,7 @@ const PROJECTS: Project[] = [
     title:       'Spartan TV',
     subtitle:    'Plataforma Streaming',
     category:    'sistemas',
-    image:       '/assets/spartan-pag.png',
+    image:       '/assets/spartan-pag.webp',
     tags:        ['Streaming', 'IPTV', 'Panel Admin'],
     result:      '500+ suscriptores activos',
     duration:    '30 días',
@@ -68,7 +66,7 @@ const PROJECTS: Project[] = [
     title:       'Peña Abogados',
     subtitle:    'Despacho Legal Online',
     category:    'web',
-    image:       '/assets/pena-pag.png',
+    image:       '/assets/pena-pag.webp',
     tags:        ['SEO Local', 'Blog', 'Despacho'],
     result:      'Top 3 Google Querétaro',
     duration:    '10 días',
@@ -80,7 +78,7 @@ const PROJECTS: Project[] = [
     title:       'Devilish Store',
     subtitle:    'Tienda Online Premium',
     category:    'ecommerce',
-    image:       '/assets/devilish-pag.png',
+    image:       '/assets/devilish-pag.webp',
     tags:        ['E-commerce', 'Dashboard', 'Pagos'],
     result:      '$180K+ ventas en año 1',
     duration:    '15 días',
@@ -110,12 +108,11 @@ export default function SelectedWorks() {
 
   // GSAP ScrollTrigger entrance
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    return withGsap((gsap) => {
       const trigger = { trigger: sectionRef.current, start: 'top 78%', once: true }
       gsap.from('.works-header',  { opacity: 0, y: 24, duration: 0.7, ease: 'power3.out',             scrollTrigger: trigger })
       gsap.from('.works-filters', { opacity: 0, y: 16, duration: 0.6, ease: 'power3.out', delay: 0.12, scrollTrigger: trigger })
     }, sectionRef)
-    return () => ctx.revert()
   }, [])
 
   return (
