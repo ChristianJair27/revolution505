@@ -3,7 +3,7 @@ import { useEffect }                               from 'react'
 import Navbar         from './components/redesign/Navbar'
 import FooterSection  from './components/redesign/FooterSection'
 import WhatsAppButton from './components/redesign/WhatsAppButton'
-import { gtagPageView, trackSpaPageView, initWhatsAppTracking, initTelClickTracking } from './lib/gtag'
+import { gtagPageView, trackSpaPageView, initContactClickTracking } from './lib/gtag'
 
 // Pages
 import Index          from './pages/Index'
@@ -12,6 +12,7 @@ import SistemasPage   from './pages/redesign/SistemasPage'
 import PreciosPage    from './pages/redesign/PreciosPage'
 import ProcesoPag     from './pages/redesign/ProcesoPag'
 import ContactoPage   from './pages/redesign/ContactoPage'
+import NotFoundPage   from './pages/redesign/NotFoundPage'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Google Ads: registra page view en cada cambio de ruta (SPA)
@@ -21,7 +22,7 @@ function GtagRouteTracker() {
 
   useEffect(() => {
     // Pequeño delay para que document.title se actualice antes de enviar
-    const id = setTimeout(() => { gtagPageView(pathname); trackSpaPageView(pathname) }, 150)
+    const id = setTimeout(() => { gtagPageView(pathname); trackSpaPageView() }, 150)
     return () => clearTimeout(id)
   }, [pathname])
 
@@ -29,13 +30,13 @@ function GtagRouteTracker() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Scroll to top + init global WhatsApp click tracking
+// Scroll to top + init global click tracking (WhatsApp, tel:, mailto:)
 // ─────────────────────────────────────────────────────────────────────────────
 function ScrollReset() {
   const { pathname } = useLocation()
 
   // Init auto-tracking de WA una sola vez al montar la app
-  useEffect(() => { initWhatsAppTracking(); initTelClickTracking() }, [])
+  useEffect(() => { initContactClickTracking() }, [])
 
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
 
@@ -53,9 +54,14 @@ function Shell({ children }: { children: React.ReactNode }) {
   )
 }
 
-export default function App() {
+/**
+ * Rutas sin router: el cliente las envuelve en <BrowserRouter> (App) y
+ * src/entry-server.tsx en <StaticRouter> para prerenderizar cada ruta.
+ * Cada ruta nueva debe agregarse también en src/seo/routes.ts.
+ */
+export function AppRoutes() {
   return (
-    <BrowserRouter>
+    <>
       <ScrollReset />
       <GtagRouteTracker />
       <Routes>
@@ -68,7 +74,18 @@ export default function App() {
         <Route path="/precios"    element={<Shell><PreciosPage /></Shell>}     />
         <Route path="/proceso"    element={<Shell><ProcesoPag /></Shell>}      />
         <Route path="/contacto"   element={<Shell><ContactoPage /></Shell>}    />
+
+        {/* 404 — prerenderizado como dist/404.html */}
+        <Route path="*"           element={<Shell><NotFoundPage /></Shell>}    />
       </Routes>
+    </>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   )
 }

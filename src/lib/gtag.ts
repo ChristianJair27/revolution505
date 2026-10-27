@@ -1,36 +1,20 @@
 // ============================================================================
-// Google Ads + GA4 / gtag — Revolution505
-// Google Ads: AW-18211203518
-// GA4:        G-L7XMTQTF0S
+// GA4 + Google Ads + Meta Pixel — Revolution505
+// IDs y labels de conversión: src/config/tracking.ts (leídos de .env).
+//
+// Eventos GA4:
+//   generate_lead   → éxito del formulario (/api/lead.php)   params: service, source
+//   whatsapp_click  → clic en cualquier a[href*="wa.me"]      params: location, link_text
+//   phone_click     → clic en a[href^="tel:"]                 params: location, link_text
+//   email_click     → clic en a[href^="mailto:"]              params: location, link_text
 //
 // Uso:
-//   1. gtagPageView(pathname) — llamar en cada cambio de ruta (ya integrado en App.tsx)
-//   2. gtagWhatsAppClick()    — conversión Ads en clics WA (vía initWhatsAppTracking)
-//   3. gtagCallClick()        — conversión Ads opcional en clics tel:
-//   4. gtagEvent(action, …)   — eventos genéricos personalizados
-//
-// NOTA: /contacto envía lead vía POST /api/lead.php (self-hosted).
-//       NO dispares lead_form_submit de Ads hasta tener label real (ticket aparte).
-//       Los clics wa.me / tel: van por initWhatsAppTracking / initTelClickTracking.
+//   1. gtagPageView(pathname)     — en cada cambio de ruta (ya integrado en App.tsx)
+//   2. initContactClickTracking() — una vez al montar la app (ya integrado en App.tsx)
+//   3. trackLead(service, source) — al éxito del formulario
 // ============================================================================
 
-/** ID de Google Ads — cambiar aquí si se renueva la cuenta */
-export const GTAG_ID = 'AW-18211203518'
-
-/** Measurement ID de Google Analytics 4 (propiedad Revolution505) */
-export const GA4_MEASUREMENT_ID = 'G-L7XMTQTF0S'
-
-/**
- * Placeholder hasta crear la conversión en Google Ads → Herramientas → Conversiones.
- * Reemplaza SOLO el sufijo después de la barra (el label), no el ID AW-…
- * Ejemplo final: 'AW-18211203518/AbCdEfGhIjKlMnOp'
- */
-export const WA_CONVERSION_SEND_TO =
-  'AW-18211203518/REPLACE_ME_WHATSAPP_CONVERSION_LABEL' as const
-
-/** Misma idea para clics en tel:+52… — opcional hasta que exista la conversión Call. */
-export const CALL_CONVERSION_SEND_TO =
-  'AW-18211203518/REPLACE_ME_CALL_CONVERSION_LABEL' as const
+import { ADS_ID, GA4_ID, adsSendTo, type AdsConversion } from '../config/tracking'
 
 declare global {
   interface Window {
@@ -43,31 +27,40 @@ declare global {
   }
 }
 
-/** Meta Pixel PageView en cada cambio de ruta SPA (además del PageView inicial en index.html). */
-export function trackSpaPageView(_path?: string): void {
-  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-    window.fbq('track', 'PageView')
-  }
-}
-
-/** Meta Pixel Contact — clics WhatsApp / teléfono. */
-export function trackMetaContact(contentName: 'whatsapp' | 'phone'): void {
-  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
-    window.fbq('track', 'Contact', {
-      content_name: contentName,
-      content_category: 'lead',
-    })
-  }
-}
+type EventParams = Record<string, string | number | undefined>
 
 /**
  * Wrapper seguro alrededor de window.gtag.
  * Si el usuario tiene un adblocker o gtag aún no cargó, no lanza errores.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function gtag(...args: any[]): void {
+function gtag(...args: unknown[]): void {
   if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
     window.gtag(...args)
+  }
+}
+
+/** Evento GA4 con parámetros. */
+export function trackEvent(name: string, params: EventParams = {}): void {
+  gtag('event', name, params)
+}
+
+/** Conversión de Google Ads; no hace nada si el label no está configurado en .env. */
+function trackAdsConversion(conversion: AdsConversion, extra: EventParams = {}): void {
+  const sendTo = adsSendTo(conversion)
+  if (sendTo) gtag('event', 'conversion', { send_to: sendTo, ...extra })
+}
+
+/** Meta Pixel PageView en cada cambio de ruta SPA (además del PageView inicial en index.html). */
+export function trackSpaPageView(): void {
+  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+    window.fbq('track', 'PageView')
+  }
+}
+
+/** Meta Pixel estándar (Contact, Lead). */
+function trackMeta(event: 'Contact' | 'Lead', params: EventParams): void {
+  if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+    window.fbq('track', event, params)
   }
 }
 
@@ -80,132 +73,52 @@ export function gtagPageView(path: string): void {
     page_path: path,
     page_title: document.title,
   }
-  gtag('config', GTAG_ID, pageParams)
-  gtag('config', GA4_MEASUREMENT_ID, pageParams)
+  gtag('config', ADS_ID, pageParams)
+  gtag('config', GA4_ID, pageParams)
 }
+
+/** Lead confirmado por el servidor (formulario de contacto). */
+export function trackLead(service: string, source: string): void {
+  trackEvent('generate_lead', { service, source })
+  trackAdsConversion('lead')
+  trackMeta('Lead', { content_name: service, content_category: source })
+}
+
+const CONTACT_LINKS: { selector: string; event: string; conversion: AdsConversion; meta: string }[] = [
+  { selector: 'a[href*="wa.me"]', event: 'whatsapp_click', conversion: 'whatsapp', meta: 'whatsapp' },
+  { selector: 'a[href^="tel:"]', event: 'phone_click', conversion: 'phone', meta: 'phone' },
+  { selector: 'a[href^="mailto:"]', event: 'email_click', conversion: 'email', meta: 'email' },
+]
+
+let _contactTrackingInitialized = false
 
 /**
- * Conversión Google Ads: clic en WhatsApp.
- * send_to usa WA_CONVERSION_SEND_TO (placeholder hasta pegar el label real).
+ * Listener global (una sola vez) para clics en WhatsApp, teléfono y correo.
+ * - No hace preventDefault: el enlace abre normalmente.
+ * - GA4: whatsapp_click / phone_click / email_click con `location` (id de la sección más cercana).
+ * - Google Ads: conversión correspondiente solo si su label existe en .env.
+ * - Meta Pixel: Contact.
  */
-export function gtagWhatsAppClick(
-  sendTo: string = WA_CONVERSION_SEND_TO,
-): void {
-  gtag('event', 'conversion', {
-    send_to: sendTo,
-    event_category: 'Lead',
-    event_label: 'whatsapp_click',
-    value: 1,
-    currency: 'MXN',
-  })
-}
-
-/**
- * Conversión Google Ads opcional: clic en teléfono (tel:).
- * send_to usa CALL_CONVERSION_SEND_TO (placeholder).
- */
-export function gtagCallClick(
-  sendTo: string = CALL_CONVERSION_SEND_TO,
-): void {
-  gtag('event', 'conversion', {
-    send_to: sendTo,
-    event_category: 'Lead',
-    event_label: 'phone_click',
-    value: 1,
-    currency: 'MXN',
-  })
-}
-
-/**
- * Opcional: conversión Ads de formulario cuando exista label real.
- * /contacto ya dispara gtagEvent('lead_form_submit') al éxito del POST.
- */
-export function gtagContactFormSubmit(conversionLabel = 'PENDIENTE_LABEL'): void {
-  gtag('event', 'conversion', {
-    send_to: `${GTAG_ID}/${conversionLabel}`,
-    event_category: 'Lead',
-    event_label: 'contact_form',
-  })
-}
-
-/** Evento genérico de Google Ads — para acciones personalizadas. */
-export function gtagEvent(
-  action: string,
-  category?: string,
-  label?: string,
-  value?: number,
-): void {
-  gtag('event', action, {
-    event_category: category,
-    event_label: label,
-    value,
-  })
-}
-
-let _waTrackingInitialized = false
-let _telTrackingInitialized = false
-
-/**
- * Listener global (una sola vez) en clics a cualquier `a[href*="wa.me"]`.
- * - Mantiene el open natural de WhatsApp (no preventDefault).
- * - Dispara evento analytics `whatsapp_click`.
- * - Dispara conversión Ads con send_to WA_CONVERSION_SEND_TO
- *   (REPLACE_ME_WHATSAPP_CONVERSION_LABEL hasta crear la conversión en Ads).
- */
-export function initWhatsAppTracking(): void {
-  if (_waTrackingInitialized || typeof document === 'undefined') return
-  _waTrackingInitialized = true
+export function initContactClickTracking(): void {
+  if (_contactTrackingInitialized || typeof document === 'undefined') return
+  _contactTrackingInitialized = true
 
   document.addEventListener(
     'click',
     (e: MouseEvent) => {
-      const target = e.target as HTMLElement
-      const anchor = target.closest<HTMLAnchorElement>('a[href*="wa.me"]')
-      if (!anchor) return
+      const target = e.target as HTMLElement | null
+      for (const link of CONTACT_LINKS) {
+        const anchor = target?.closest<HTMLAnchorElement>(link.selector)
+        if (!anchor) continue
 
-      const text = anchor.textContent?.trim().slice(0, 40) ?? 'WhatsApp CTA'
-      const section = anchor.closest('[id]')?.id ?? 'unknown'
-
-      // Evento de engagement (siempre)
-      gtagEvent('whatsapp_click', 'Lead', `${section} — ${text}`)
-
-      // Conversión Google Ads — REPLACE_ME_WHATSAPP_CONVERSION_LABEL en Ads
-      // cuando tengas el label real: edita WA_CONVERSION_SEND_TO arriba.
-      gtagWhatsAppClick(WA_CONVERSION_SEND_TO)
-
-      // Meta Pixel Contact (brief PIXEL-brief-dev.md)
-      trackMetaContact('whatsapp')
-    },
-    { passive: true },
-  )
-}
-
-/**
- * Listener global (una sola vez) en clics a `a[href^="tel:"]`.
- * - Mantiene el marcado de llamada (no preventDefault).
- * - Dispara evento `phone_click` + conversión opcional CALL_CONVERSION_SEND_TO.
- */
-export function initTelClickTracking(): void {
-  if (_telTrackingInitialized || typeof document === 'undefined') return
-  _telTrackingInitialized = true
-
-  document.addEventListener(
-    'click',
-    (e: MouseEvent) => {
-      const target = e.target as HTMLElement
-      const anchor = target.closest<HTMLAnchorElement>('a[href^="tel:"]')
-      if (!anchor) return
-
-      const text = anchor.textContent?.trim().slice(0, 40) ?? 'Phone CTA'
-      const section = anchor.closest('[id]')?.id ?? 'unknown'
-
-      gtagEvent('phone_click', 'Lead', `${section} — ${text}`)
-
-      // Opcional: REPLACE_ME_CALL_CONVERSION_LABEL cuando exista en Google Ads
-      gtagCallClick(CALL_CONVERSION_SEND_TO)
-
-      // Meta Pixel Contact en tel:
-      trackMetaContact('phone')
+        trackEvent(link.event, {
+          location: anchor.closest('[id]')?.id ?? 'unknown',
+          link_text: anchor.textContent?.trim().slice(0, 40) || undefined,
+        })
+        trackAdsConversion(link.conversion)
+        trackMeta('Contact', { content_name: link.meta, content_category: 'lead' })
+        return
+      }
     },
     { passive: true },
   )

@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react       from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   // Required for Hostinger root-domain deployment
   base: '/',
 
@@ -17,8 +17,9 @@ export default defineConfig({
     chunkSizeWarningLimit: 700,
 
     rollupOptions: {
-      output: {
-        manualChunks(id) {
+      // El build SSR (solo para prerender) no necesita chunks manuales.
+      output: isSsrBuild ? {} : {
+        manualChunks(id: string) {
           // GSAP: no React dependency — safe to isolate, cached separately
           if (id.includes('node_modules/gsap')) return 'vendor-gsap'
 
@@ -32,4 +33,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))
