@@ -609,11 +609,7 @@ function PortafolioHero() {
 // Main Page
 // ─────────────────────────────────────────────────────────────────────────────
 export default function PortafolioPage() {
-  usePageMeta({
-    title:       'Portafolio de Proyectos',
-    description: '12 proyectos reales de desarrollo web, sistemas y e-commerce en Querétaro y México. Resultados medibles: +340% leads, $180K+ ventas, Top 3 Google.',
-    canonical:   '/portafolio',
-  })
+  usePageMeta('/portafolio')
 
   const gridRef                         = useRef<HTMLDivElement>(null)
   const [filter, setFilter]             = useState<FilterType>('all')
