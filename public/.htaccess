@@ -1,14 +1,27 @@
-# Revolution505 — SPA + API PHP (Hostinger Apache)
-Options -MultiViews
+# Revolution505 — sitio prerenderizado + API PHP (Hostinger Apache)
+# Cada ruta existe como archivo: /precios → precios.html. Ya NO hay fallback SPA a index.html,
+# así que las URLs inexistentes responden 404 real (antes: 200 con el home = soft-404).
+Options -MultiViews -Indexes
+DirectorySlash Off
+ErrorDocument 404 /404.html
+
 RewriteEngine On
 
-# Keep real files and directories (assets, api/*.php, robots, sitemap)
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
+# /index.html → /   y   /precios.html → /precios   (evita URLs duplicadas)
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+RewriteRule ^ / [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+([^\s?]+?)\.html[\s?] [NC]
+RewriteCond %1 !^404$
+RewriteRule ^ /%1 [R=301,L]
+
+# /precios/ → /precios   (sin barra final; la home "/" no se toca)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+# Archivos reales (assets, api/*.php, robots, sitemap) se sirven tal cual
+RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^ - [L]
 
-# Never rewrite API PHP to the SPA
-RewriteRule ^api/ - [L]
-
-# SPA fallback
-RewriteRule ^ index.html [L]
+# /precios → precios.html (solo si existe; si no, cae al 404)
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+)$ $1.html [L]
