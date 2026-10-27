@@ -9,7 +9,7 @@
 //   dist/404.html          → ErrorDocument 404 (noindex)
 //   dist/sitemap.xml       → rutas de src/seo/routes.ts con <lastmod> del último commit de su fuente
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
@@ -20,7 +20,17 @@ const ssrDir = resolve(root, 'dist-ssr')
 const ssr = await import(pathToFileURL(resolve(ssrDir, 'entry-server.js')).href)
 const { render, routes, NOT_FOUND_META, SITE_NAME, DEFAULT_OG_IMAGE, canonicalUrl, fullTitle } = ssr
 
-const template = readFileSync(resolve(dist, 'index.html'), 'utf8')
+// Precarga las 2 fuentes del primer pantallazo (titulares en Instrument Serif itálica y
+// texto en Inter 400). Sin esto llegan tarde, el texto se pinta con la fuente de respaldo
+// y al cambiar de fuente el hero salta (CLS).
+const criticalFonts = readdirSync(resolve(dist, 'assets'))
+  .filter((f) => /^(instrument-serif-latin-400-italic|inter-latin-400-normal)-[\w-]+\.woff2$/.test(f))
+  .map((f) => `<link rel="preload" href="/assets/${f}" as="font" type="font/woff2" crossorigin>`)
+
+const template = readFileSync(resolve(dist, 'index.html'), 'utf8').replace(
+  '</head>',
+  () => `    ${criticalFonts.join('\n    ')}\n  </head>`,
+)
 
 const escapeAttr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 const escapeText = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;')

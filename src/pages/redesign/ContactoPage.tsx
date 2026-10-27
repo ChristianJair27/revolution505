@@ -87,9 +87,6 @@ export default function ContactoPage() {
 
       <div className="max-w-5xl mx-auto relative">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
           className="text-center mb-14"
         >
           <div className="flex items-center justify-center gap-3 mb-3">
@@ -108,9 +105,6 @@ export default function ContactoPage() {
 
         <div className="grid md:grid-cols-5 gap-8 md:gap-12">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
             className="md:col-span-3 space-y-5"
           >
             {status === 'sent' ? (
@@ -288,9 +282,6 @@ export default function ContactoPage() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
             className="md:col-span-2 space-y-4"
           >
             <div className="p-6 rounded-3xl border border-stroke/60 bg-surface/20 space-y-4">

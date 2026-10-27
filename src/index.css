@@ -59,6 +59,13 @@
 }
 
 @layer utilities {
+  /* Secciones del home bajo el pliegue: el navegador se salta estilo, layout y pintado
+     hasta que se acercan al viewport. "auto" recuerda la altura real ya medida. */
+  .cv-sections > * {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
+
   .accent-gradient {
     background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
   }

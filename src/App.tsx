@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect }                               from 'react'
+import { MotionConfig }                             from 'framer-motion'
 import Navbar         from './components/redesign/Navbar'
 import FooterSection  from './components/redesign/FooterSection'
 import WhatsAppButton from './components/redesign/WhatsAppButton'
@@ -68,6 +69,8 @@ export function AppRoutes() {
     <>
       <ScrollReset />
       <GtagRouteTracker />
+      {/* Respeta "reducir movimiento" del sistema en todas las animaciones de framer-motion */}
+      <MotionConfig reducedMotion="user">
       <Routes>
         {/* Home — full landing (has own Navbar/Footer via Index) */}
         <Route path="/" element={<Index />} />
@@ -97,6 +100,7 @@ export function AppRoutes() {
         {/* 404 — prerenderizado como dist/404.html */}
         <Route path="*"           element={<Shell><NotFoundPage /></Shell>}    />
       </Routes>
+      </MotionConfig>
     </>
   )
 }
