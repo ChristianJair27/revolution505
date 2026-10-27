@@ -48,7 +48,7 @@ Sitio web corporativo SPA para Revolution505 Tech Solutions (desarrollo web, sis
 - **Loading Screen** — Contador 000→100 con `requestAnimationFrame`, palabras rotativas
 - **Navbar** — Pill glassmorphism fijo, logo con ring accent gradient
 - **Hero** — Full viewport, video HLS de fondo, partículas, headline gigante, role cycling
-- **Precios** — 3 planes ($6,500 / $12,500 / $18,500 MXN) con WhatsApp CTA directo
+- **Precios** — 3 planes ($6,500 / $12,500 / $22,500 MXN) con WhatsApp CTA directo
 - **WhatsApp flotante** — Botón fijo en toda la app
 
 ## TypeScript
