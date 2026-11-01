@@ -29,3 +29,7 @@ dist-ssr
 # Lead form SMTP secrets (Hostinger)
 public/api/lead.config.php
 dist/api/lead.config.php
+
+# Playwright
+test-results
+playwright-report

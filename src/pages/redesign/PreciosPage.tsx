@@ -159,11 +159,7 @@ function PreciosHero() {
 }
 
 export default function PreciosPage() {
-  usePageMeta({
-    title:       'Precios y Planes',
-    description: 'Planes web desde $6,500 MXN — Querétaro, México y remoto. Sin letra pequeña. Hosting y soporte incluidos. Cotiza por correo o WhatsApp.',
-    canonical:   '/precios',
-  })
+  usePageMeta('/precios')
   return (
     <>
       <PreciosHero />

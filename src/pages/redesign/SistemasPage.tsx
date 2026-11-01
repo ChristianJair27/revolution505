@@ -174,11 +174,7 @@ function SistemasHero() {
 }
 
 export default function SistemasPage() {
-  usePageMeta({
-    title:       'Sistemas a Medida',
-    description: 'POS, reservas, CRM y streaming a medida. Base en Querétaro, entrega en México y remoto. Sin mensualidades — el código es tuyo.',
-    canonical:   '/sistemas',
-  })
+  usePageMeta('/sistemas')
   return (
     <>
       <SistemasHero />

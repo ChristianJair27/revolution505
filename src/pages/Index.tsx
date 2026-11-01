@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { usePageMeta }      from '../hooks/usePageMeta'
 import LoadingScreen        from '../components/redesign/LoadingScreen'
 import Navbar               from '../components/redesign/Navbar'
 import HeroSection          from '../components/redesign/HeroSection'
@@ -19,6 +20,7 @@ import WhatsAppButton       from '../components/redesign/WhatsAppButton'
 export default function Index() {
   const [loading, setLoading] = useState(true)
   const mainRef = useRef<HTMLDivElement>(null)
+  usePageMeta('/')
 
   return (
     <>

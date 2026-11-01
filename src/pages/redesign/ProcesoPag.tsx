@@ -160,11 +160,7 @@ function ProcesoHero() {
 }
 
 export default function ProcesoPag() {
-  usePageMeta({
-    title:       'Proceso de Trabajo',
-    description: 'Proceso claro en 6 pasos — briefing a lanzamiento. Entrega promedio 12 días hábiles. Clientes en Querétaro, México y remoto.',
-    canonical:   '/proceso',
-  })
+  usePageMeta('/proceso')
   return (
     <>
       <ProcesoHero />

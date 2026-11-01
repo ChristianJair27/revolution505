@@ -408,7 +408,10 @@ const ThumbnailStrip = ({ sistema, current, onChange }: ThumbnailStripProps) => 
       {sistema.screenshots.map((src, i) => (
         <button
           key={i}
+          type="button"
           onClick={() => onChange(i)}
+          aria-label={`Ver captura ${i + 1} de ${sistema.screenshots.length}`}
+          aria-pressed={i === current}
           className={`relative flex-shrink-0 w-16 h-10 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
             i === current ? 'border-accent shadow-sm shadow-accent/30' : 'border-stroke/50 opacity-60 hover:opacity-90 hover:border-stroke'
           }`}

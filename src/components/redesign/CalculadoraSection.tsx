@@ -413,6 +413,7 @@ export default function CalculadoraSection() {
                       type="range"
                       min={1}
                       max={10}
+                      aria-label="Número de páginas o secciones"
                       value={config.pages}
                       onChange={e => setConfig(prev => ({ ...prev, pages: +e.target.value }))}
                       className="calc-slider w-full h-1.5 rounded-full appearance-none cursor-pointer"
