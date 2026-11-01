@@ -41,11 +41,8 @@
     <meta name="twitter:image"       content="https://revolution505.com/assets/revolution-pag.png" />
 
     <!-- Performance: preconnect for external resources -->
-    <link rel="preconnect" href="https://stream.mux.com" />
-    <link rel="dns-prefetch" href="https://stream.mux.com" />
     <link rel="dns-prefetch" href="https://wa.me" />
-    <!-- Google Ads: early connection to reduce script load latency -->
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <!-- Google / Meta: solo DNS; sus scripts se cargan después del evento load -->
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
@@ -99,11 +96,12 @@
     }
     </script>
 
-    <!-- Google Tag (gtag.js) — Revolution505
+    <!-- Google Tag (GA4 + Ads) y Meta Pixel — Revolution505
          IDs desde .env (VITE_GA4_ID / VITE_ADS_ID) — ver src/config/tracking.ts
-         • async: no bloquea el renderizado HTML
+         • gtag() y fbq() existen desde el inicio y encolan todo (page views, clics, leads).
+         • Las librerías (~550 KB entre Google y Meta) se descargan hasta el evento load:
+           antes se ejecutaban a mitad del parseo y retrasaban el primer pintado.
          • send_page_view: false — los cambios de ruta SPA los dispara App.tsx -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA4_ID%"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -111,20 +109,28 @@
       // send_page_view: false → React Router maneja los page views de cada ruta
       gtag('config', '%VITE_ADS_ID%', { send_page_view: false });
       gtag('config', '%VITE_GA4_ID%', { send_page_view: false });
-    </script>
 
-    <!-- Meta Pixel Code (Pixel ID 1138550823166045) -->
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      // Meta Pixel (ID 1138550823166045): cola oficial de fbq; el script se inserta abajo
+      !function(f,n){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;f.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[]}(window);
       fbq('init', '1138550823166045');
       fbq('track', 'PageView');
+
+      (function () {
+        function add(src) {
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = src;
+          document.head.appendChild(s);
+        }
+        function load() {
+          add('https://www.googletagmanager.com/gtag/js?id=%VITE_GA4_ID%');
+          add('https://connect.facebook.net/en_US/fbevents.js');
+        }
+        if (document.readyState === 'complete') load();
+        else window.addEventListener('load', load, { once: true });
+      })();
     </script>
     <!-- End Meta Pixel Code -->
 

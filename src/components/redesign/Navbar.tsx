@@ -80,9 +80,7 @@ export default function Navbar() {
     >
       {/* ── Pill container ── */}
       <motion.div
-        initial={{ y: -28, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.65, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+        initial={false}
         className={`pointer-events-auto inline-flex items-center rounded-full border px-2 py-2 transition-all duration-500 ${
           scrolled
             ? 'border-stroke/80 bg-surface/92 backdrop-blur-md shadow-lg shadow-black/25'
@@ -115,13 +113,12 @@ export default function Navbar() {
           />
           <span className="relative z-10 w-7 h-7 rounded-full bg-bg flex items-center justify-center overflow-hidden">
             <img
-              src="/assets/logo-r.png"
+              src="/assets/logo-r-96.webp"
               alt="Revolution505"
               className="w-5 h-5 object-contain"
               width="20"
               height="20"
               draggable={false}
-              fetchPriority="high"
             />
           </span>
         </Link>

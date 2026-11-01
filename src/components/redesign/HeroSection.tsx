@@ -3,7 +3,6 @@ import { WA, CONTACT_MAILTO, CONTACT_EMAIL } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Mail, MessageCircle } from 'lucide-react'
 import type HlsType from 'hls.js'
-import gsap from 'gsap'
 
 const roles = ['Páginas Web', 'Sistemas Personalizados', 'Tiendas Online', 'Soluciones Digitales']
 
@@ -11,8 +10,8 @@ const HLS_SRC = 'https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4
 
 export default function HeroSection() {
   const [roleIndex, setRoleIndex] = useState(0)
+  const [videoOn, setVideoOn] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const sectionRef = useRef<HTMLElement>(null)
 
   /* ── Role cycling ── */
   useEffect(() => {
@@ -22,58 +21,77 @@ export default function HeroSection() {
     return () => clearInterval(interval)
   }, [])
 
-  /* ── HLS video ──
-     hls.js (~160 KB gzip) se importa dinámicamente: ya no bloquea la carga inicial
-     ni se precarga en todas las rutas. Safari usa HLS nativo y nunca lo descarga. */
+  /* ── Video HLS de fondo ──
+     Es decorativo: el titular prerenderizado es el LCP y se ve desde el primer pintado.
+     Arranca solo (escritorio y móvil) cuando la página terminó de cargar y el navegador
+     está libre. Decisión de Christian: en móvil su primer cuadro pasa a ser el LCP
+     (~11 s en Lighthouse móvil). Calidad limitada al tamaño de pantalla.
+     Con "ahorro de datos", red 2G o "reducir movimiento" queda el gradiente
+     (.cosmic-gradient). hls.js (~160 KB gzip) se importa dinámicamente. */
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = HLS_SRC
-      video.play().catch(() => {})
-      return
-    }
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
+    const skip =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      conn?.saveData === true ||
+      /(^|-)2g$/.test(conn?.effectiveType ?? '')
+    if (skip) return
 
     let hls: HlsType | undefined
     let cancelled = false
-    import('hls.js').then(({ default: Hls }) => {
-      if (cancelled || !Hls.isSupported()) return
-      hls = new Hls({ lowLatencyMode: false, startLevel: -1 })
-      hls.loadSource(HLS_SRC)
-      hls.attachMedia(video)
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch(() => {})
-      })
-    }).catch(() => {})
+    let idleId: number | undefined
+
+    const play = () => {
+      video.play().then(() => setVideoOn(true)).catch(() => {})
+    }
+
+    const playNative = () => {
+      if (!video.canPlayType('application/vnd.apple.mpegurl')) return
+      video.src = HLS_SRC
+      play()
+    }
+
+    // hls.js primero (orden recomendado): Chrome reciente dice soportar HLS nativo pero
+    // falla con este stream. HLS nativo queda para navegadores sin MediaSource (iOS).
+    const start = () => {
+      if (cancelled) return
+      if (!('MediaSource' in window)) {
+        playNative()
+        return
+      }
+      import('hls.js').then(({ default: Hls }) => {
+        if (cancelled) return
+        if (!Hls.isSupported()) {
+          playNative()
+          return
+        }
+        hls = new Hls({ lowLatencyMode: false, startLevel: 0, capLevelToPlayerSize: true })
+        hls.loadSource(HLS_SRC)
+        hls.attachMedia(video)
+        hls.on(Hls.Events.MANIFEST_PARSED, play)
+      }).catch(() => {})
+    }
+
+    const schedule = () => {
+      idleId = typeof window.requestIdleCallback === 'function'
+        ? window.requestIdleCallback(start, { timeout: 3000 })
+        : setTimeout(start, 1500)
+    }
+
+    if (document.readyState === 'complete') schedule()
+    else window.addEventListener('load', schedule, { once: true })
 
     return () => {
       cancelled = true
+      window.removeEventListener('load', schedule)
+      if (idleId !== undefined) {
+        if (typeof window.cancelIdleCallback === 'function') window.cancelIdleCallback(idleId)
+        else clearTimeout(idleId)
+      }
       hls?.destroy()
     }
-  }, [])
-
-  /* ── GSAP entrance animations ── */
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-
-      tl
-        .fromTo(
-          '.hero-name',
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 1.2 },
-          0.1
-        )
-        .fromTo(
-          '.hero-blur-in',
-          { opacity: 0, filter: 'blur(10px)', y: 20 },
-          { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1, stagger: 0.12 },
-          0.3
-        )
-    }, sectionRef)
-
-    return () => ctx.revert()
   }, [])
 
   const scrollTo = (id: string) => {
@@ -82,7 +100,6 @@ export default function HeroSection() {
 
   return (
     <section
-      ref={sectionRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
       {/* ── Video background ── */}
@@ -92,8 +109,9 @@ export default function HeroSection() {
           muted
           loop
           playsInline
-          autoPlay
-          className="absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover"
+          preload="none"
+          aria-hidden
+          className={`absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover transition-opacity duration-1000 ${videoOn ? 'opacity-100' : 'opacity-0'}`}
         />
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/30" />
@@ -109,21 +127,21 @@ export default function HeroSection() {
       <div className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-24">
 
         {/* Eyebrow */}
-        <span className="hero-blur-in inline-block text-xs text-muted uppercase tracking-[0.3em] mb-8">
+        <span className="inline-block text-xs text-muted uppercase tracking-[0.3em] mb-8">
           DESARROLLO WEB · QUERÉTARO · ALCANCE GLOBAL
         </span>
 
         {/* Main headline */}
-        <h1 className="hero-name text-6xl md:text-8xl lg:text-[7rem] xl:text-[8rem] font-display italic leading-[0.9] tracking-tight text-text-primary mb-6">
+        <h1 className="text-6xl md:text-8xl lg:text-[7rem] xl:text-[8rem] font-display italic leading-[0.9] tracking-tight text-text-primary mb-6">
           Transformamos
           <br />
           <span className="accent-gradient-text">Ideas en Realidad</span>
         </h1>
 
         {/* Animated role line */}
-        <div className="hero-blur-in flex items-center justify-center gap-2 text-lg md:text-xl mb-8 min-h-[2rem]">
+        <div className="flex items-center justify-center gap-2 text-lg md:text-xl mb-8 min-h-[3.5rem] sm:min-h-[2rem]">
           <span className="text-text-primary/40 font-body">Creamos</span>
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             <motion.span
               key={roles[roleIndex]}
               initial={{ opacity: 0, y: 8 }}
@@ -139,14 +157,14 @@ export default function HeroSection() {
         </div>
 
         {/* Description */}
-        <p className="hero-blur-in text-sm md:text-base text-muted max-w-lg mx-auto mb-12 leading-relaxed">
+        <p className="text-sm md:text-base text-muted max-w-lg mx-auto mb-12 leading-relaxed">
           Agencia de desarrollo web en Querétaro con clientes en México y el extranjero.
           Sitios, sistemas a medida, tiendas online y apps en infraestructura propia (Coolify).
           Cotiza por correo o WhatsApp — sin métricas inventadas, solo proyectos reales.
         </p>
 
         {/* ── Dual CTAs: correo + WhatsApp ── */}
-        <div className="hero-blur-in inline-flex flex-col sm:flex-row items-center gap-4">
+        <div className="inline-flex flex-col sm:flex-row items-center gap-4">
 
           {/* Primary: correo */}
           <a
@@ -185,7 +203,7 @@ export default function HeroSection() {
             </span>
           </a>
         </div>
-        <p className="hero-blur-in mt-5 text-[11px] text-muted/70">
+        <p className="mt-5 text-[11px] text-muted/70">
           Correo: {CONTACT_EMAIL} · O{' '}
           <button type="button" onClick={() => scrollTo('portafolio')} className="underline underline-offset-2 hover:text-text-primary transition-colors">
             ver proyectos reales

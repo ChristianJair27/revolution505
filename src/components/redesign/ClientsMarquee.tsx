@@ -11,11 +11,11 @@ interface Client {
 }
 
 const CLIENTS: Client[] = [
-  { name: 'AMQ Group',             logo: '/assets/amq-logo.png',    industry: 'Construcción',  initials: 'AMQ' },
-  { name: 'FlyZZ Services',        logo: '/assets/FLYZZ-logo.png',  industry: 'Servicios',     initials: 'FLZ' },
-  { name: 'Peña Abogados',         logo: '/assets/pena-logo.png',   industry: 'Legal',         initials: 'PA'  },
-  { name: 'AtakGG',                logo: '/assets/atakgg-logo.png', industry: 'Gaming',        initials: 'AGG' },
-  { name: 'Spartan TV',            logo: '/assets/iptv-logo.png',   industry: 'Streaming',     initials: 'SPT' },
+  { name: 'AMQ Group',             logo: '/assets/amq-logo.webp',    industry: 'Construcción',  initials: 'AMQ' },
+  { name: 'FlyZZ Services',        logo: '/assets/FLYZZ-logo.webp',  industry: 'Servicios',     initials: 'FLZ' },
+  { name: 'Peña Abogados',         logo: '/assets/pena-logo.webp',   industry: 'Legal',         initials: 'PA'  },
+  { name: 'AtakGG',                logo: '/assets/atakgg-logo.webp', industry: 'Gaming',        initials: 'AGG' },
+  { name: 'Spartan TV',            logo: '/assets/iptv-logo.webp',   industry: 'Streaming',     initials: 'SPT' },
   { name: 'Devilish Store',        industry: 'Moda / Retail',       initials: 'DVL' },
   { name: 'Nexus Dental',          industry: 'Salud',               initials: 'NDT' },
   { name: 'CasaFlex',              industry: 'Inmobiliaria',        initials: 'CFX' },

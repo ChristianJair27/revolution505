@@ -2,10 +2,8 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { waUrl } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, ArrowRight, ArrowLeft, RotateCcw } from 'lucide-react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { withGsap } from '../../lib/gsap'
 
-gsap.registerPlugin(ScrollTrigger)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -450,7 +448,7 @@ export default function ConfiguradorSection() {
 
   // GSAP entrance for section header
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    return withGsap((gsap) => {
       gsap.from('.config-header', {
         opacity: 0, y: 24, duration: 0.7, ease: 'power3.out',
         scrollTrigger: { trigger: sectionRef.current, start: 'top 78%', once: true },
@@ -460,7 +458,6 @@ export default function ConfiguradorSection() {
         scrollTrigger: { trigger: sectionRef.current, start: 'top 78%', once: true },
       })
     }, sectionRef)
-    return () => ctx.revert()
   }, [])
 
   const isResult = step >= TOTAL

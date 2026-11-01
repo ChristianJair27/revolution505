@@ -37,7 +37,7 @@ Sitio web corporativo SPA para Revolution505 Tech Solutions (desarrollo web, sis
 
 - `src/pages/` — 6 páginas: Index (Home nuevo), Portfolio, Clients, Blog, Contact
 - `src/components/` — Header, Footer, sections/ (legacy)
-- `src/components/redesign/` — **Nuevos componentes cinematic**: LoadingScreen, Navbar, HeroSection, SelectedWorks, PreciosSection, ProcesoSection, TestimoniosSection, InsightsSection, FooterSection, WhatsAppButton
+- `src/components/redesign/` — **Nuevos componentes cinematic**: Navbar, HeroSection, SelectedWorks, PreciosSection, ProcesoSection, TestimoniosSection, InsightsSection, FooterSection, WhatsAppButton
 - `src/main.tsx` — Entrypoint, hidrata `<App />` en `#root`
 - `src/App.tsx` — `AppRoutes` (rutas + 404) envuelto en BrowserRouter; `src/entry-server.tsx` lo envuelve en StaticRouter para prerender
 - `src/index.css` — `@import "tailwindcss"` + `@theme` variables + animaciones
@@ -47,9 +47,8 @@ Sitio web corporativo SPA para Revolution505 Tech Solutions (desarrollo web, sis
 - **Tema**: Dark-only cósmico (`--bg: 0 0% 4%`), acento azul (`#3b82f6` → `#60a5fa`)
 - **Fuentes**: `Inter` (body) + `Instrument Serif` (display, italic)
 - **Tailwind v4** — Tema definido vía `@theme` en CSS; no usar `tailwind.config.js` (vestigial)
-- **Loading Screen** — Contador 000→100 con `requestAnimationFrame`, palabras rotativas
 - **Navbar** — Pill glassmorphism fijo, logo con ring accent gradient
-- **Hero** — Full viewport, video HLS de fondo, partículas, headline gigante, role cycling
+- **Hero** — Full viewport, video HLS de fondo (después del evento load), headline gigante, role cycling
 - **Precios** — 3 planes ($6,500 / $12,500 / $22,500 MXN) con WhatsApp CTA directo
 - **WhatsApp flotante** — Botón fijo en toda la app
 
@@ -65,7 +64,18 @@ Sitio web corporativo SPA para Revolution505 Tech Solutions (desarrollo web, sis
 - **Ruteo** — `/` usa el diseño nuevo cinematográfico. Las páginas `/portafolio`, `/clientes`, `/blog`, `/contacto` usan el diseño legacy (Header/Footer viejos).
 - **Alias de imports** — No hay alias configurados; usar imports relativos.
 - **tailwind.config.js** — Vestigial de v3. Las animaciones que tiene están duplicadas en `index.css`.
-- **HLS video** — El Hero intenta cargar `/assets/hero-bg.m3u8`. Si no existe, fallback a gradiente.
+- **HLS video** — Stream de Mux en `HeroSection`. Arranca solo después de `load` + idle, en escritorio y móvil (en móvil su primer cuadro se vuelve el LCP; aceptado por Christian). Con ahorro de datos, 2G o reducir movimiento queda el gradiente.
+
+## Performance (rama perf)
+
+- **Nada visible arriba del pliegue puede empezar en `opacity:0`** (navbar, H1 y heros): el HTML prerenderizado debe verse sin JS. Animaciones de entrada solo en secciones que entran con scroll.
+- Sin loading screen. `main.tsx` hidrata después del primer pintado.
+- GSAP + ScrollTrigger se cargan con `withGsap()` (`src/lib/gsap.ts`) tras `load` + idle. No importar `gsap` de forma estática.
+- GA4, Ads y Meta Pixel: `gtag()`/`fbq()` encolan desde el inicio; sus librerías se insertan en el evento `load` (`index.html`).
+- Imágenes: WebP redimensionadas (≤ 1280 px capturas, ≤ 256 px logos) con `loading="lazy"`. Los PNG originales se quedan solo para OG y páginas legacy.
+- Fuentes: `prerender.mjs` precarga Instrument Serif itálica y Inter 400 (latin).
+- Home: secciones bajo el pliegue dentro de `.cv-sections` (`content-visibility: auto`).
+- `tests/perf.spec.ts` vigila lo anterior.
 
 ## Estrategia de Marketing (del análisis de competidores)
 

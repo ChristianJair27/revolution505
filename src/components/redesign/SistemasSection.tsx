@@ -2,10 +2,8 @@ import { useState, useRef, useEffect } from 'react'
 import { WA } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { withGsap } from '../../lib/gsap'
 
-gsap.registerPlugin(ScrollTrigger)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -38,11 +36,11 @@ const SISTEMAS: Sistema[] = [
     tagline: 'Control total de tu cocina y comedor',
     description: 'Sistema completo para restaurantes: cobro rápido, mesas en tiempo real, órdenes directas a cocina y reportes diarios. Todo desde una sola pantalla.',
     screenshots: [
-      '/assets/restaurante-dashboard.png',
-      '/assets/restaurante-mesas.png',
-      '/assets/restaurante-cocina.png',
-      '/assets/restaurante-cobro.png',
-      '/assets/restaurante-meseros-perfil.png',
+      '/assets/restaurante-dashboard.webp',
+      '/assets/restaurante-mesas.webp',
+      '/assets/restaurante-cocina.webp',
+      '/assets/restaurante-cobro.webp',
+      '/assets/restaurante-meseros-perfil.webp',
     ],
     features: [
       'Gestión de mesas en tiempo real',
@@ -64,8 +62,8 @@ const SISTEMAS: Sistema[] = [
     tagline: 'Inventario y ventas bajo control total',
     description: 'Punto de venta flexible para comercios, farmacias, papelerías y tiendas. Controla tu inventario, ventas y clientes desde un panel intuitivo.',
     screenshots: [
-      '/assets/pos-atagg-dashboard.png',
-      '/assets/pos-lqc-interface.png',
+      '/assets/pos-atagg-dashboard.webp',
+      '/assets/pos-lqc-interface.webp',
     ],
     features: [
       'Control de inventario en tiempo real',
@@ -372,6 +370,8 @@ const BrowserFrame = ({ sistema, slideIdx, onPause, onResume }: BrowserFrameProp
               exit={{ opacity: 0, scale: 0.97 }}
               transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
               draggable={false}
+              loading="lazy"
+              decoding="async"
             />
           </AnimatePresence>
         ) : sistema.mockupType === 'reservas' ? (
@@ -448,14 +448,13 @@ export default function SistemasSection() {
 
   // GSAP ScrollTrigger entrance
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    return withGsap((gsap) => {
       const trigger = { trigger: sectionRef.current, start: 'top 76%', once: true }
       gsap.from('.sist-header',  { opacity: 0, y: 24,  duration: 0.7, ease: 'power3.out',             scrollTrigger: trigger })
       gsap.from('.sist-badges',  { opacity: 0, y: 12,  duration: 0.6, ease: 'power3.out', delay: 0.1, scrollTrigger: trigger })
       gsap.from('.sist-tabs',    { opacity: 0, y: 16,  duration: 0.6, ease: 'power3.out', delay: 0.18, scrollTrigger: trigger })
       gsap.from('.sist-content', { opacity: 0, y: 20,  duration: 0.7, ease: 'power3.out', delay: 0.28, scrollTrigger: trigger })
     }, sectionRef)
-    return () => ctx.revert()
   }, [])
 
   const handlePrev = () => {

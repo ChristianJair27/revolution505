@@ -5,10 +5,8 @@ import {
   Check, ArrowRight, Zap, Globe, ShoppingCart,
   Monitor, Users, Calendar,
 } from 'lucide-react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { withGsap } from '../../lib/gsap'
 
-gsap.registerPlugin(ScrollTrigger)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -295,13 +293,12 @@ export default function CalculadoraSection() {
 
   // GSAP ScrollTrigger entrance
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    return withGsap((gsap) => {
       const trigger = { trigger: sectionRef.current, start: 'top 78%', once: true }
       gsap.from('.calc-header',  { opacity: 0, y: 24, duration: 0.7, ease: 'power3.out', scrollTrigger: trigger })
       gsap.from('.calc-left',    { opacity: 0, x: -32, duration: 0.8, ease: 'power3.out', delay: 0.1, scrollTrigger: trigger })
       gsap.from('.calc-right',   { opacity: 0, x: 32,  duration: 0.8, ease: 'power3.out', delay: 0.2, scrollTrigger: trigger })
     }, sectionRef)
-    return () => ctx.revert()
   }, [])
 
   // Step labels

@@ -2,10 +2,8 @@ import { useState, useRef, useEffect } from 'react'
 import { waUrl } from '../../constants/whatsapp'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { withGsap } from '../../lib/gsap'
 
-gsap.registerPlugin(ScrollTrigger)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types & data
@@ -246,12 +244,11 @@ export default function SimuladorSection() {
   const active                  = INDUSTRIES.find(i => i.id === activeId)!
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    return withGsap((gsap) => {
       const trigger = { trigger: sectionRef.current, start: 'top 76%', once: true }
       gsap.from('.sim-header', { opacity: 0, y: 24, duration: 0.7, ease: 'power3.out',              scrollTrigger: trigger })
       gsap.from('.sim-body',   { opacity: 0, y: 22, duration: 0.7, ease: 'power3.out', delay: 0.15, scrollTrigger: trigger })
     }, sectionRef)
-    return () => ctx.revert()
   }, [])
 
   return (

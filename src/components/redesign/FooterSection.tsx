@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react'
 import { WA, CONTACT_EMAIL, CONTACT_MAILTO } from '../../constants/whatsapp'
 import { Link } from 'react-router-dom'
 import { ArrowRight, ArrowUpRight, MapPin, Phone, Clock, Mail } from 'lucide-react'
-import gsap from 'gsap'
+import { withGsap } from '../../lib/gsap'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
@@ -81,40 +81,13 @@ const SOCIALS = [
 ]
 
 // ─────────────────────────────────────────────────────────────────────────────
-// GSAP Marquee
+// Marquee
 // ─────────────────────────────────────────────────────────────────────────────
 function Marquee() {
-  const trackRef    = useRef<HTMLDivElement>(null)
-  const tweenRef    = useRef<gsap.core.Tween | null>(null)
-  const wrapperRef  = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      tweenRef.current = gsap.to(trackRef.current, {
-        xPercent: -50,
-        duration:  38,
-        ease:      'none',
-        repeat:    -1,
-      })
-    })
-
-    // Pause on hover
-    const el = wrapperRef.current
-    const pause  = () => tweenRef.current?.pause()
-    const resume = () => tweenRef.current?.play()
-    el?.addEventListener('mouseenter', pause)
-    el?.addEventListener('mouseleave', resume)
-
-    return () => {
-      ctx.revert()
-      el?.removeEventListener('mouseenter', pause)
-      el?.removeEventListener('mouseleave', resume)
-    }
-  }, [])
-
+  // Animación CSS (.animate-marquee-scroll en index.css): no depende de GSAP y se pausa al pasar el mouse.
   return (
-    <div ref={wrapperRef} className="overflow-hidden border-y border-stroke py-5 cursor-default select-none">
-      <div ref={trackRef} className="flex whitespace-nowrap will-change-transform">
+    <div className="group overflow-hidden border-y border-stroke py-5 cursor-default select-none">
+      <div className="flex w-max whitespace-nowrap animate-marquee-scroll group-hover:[animation-play-state:paused]">
         {Array.from({ length: 10 }).map((_, i) => (
           <span
             key={i}
@@ -138,13 +111,12 @@ export default function FooterSection() {
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    return withGsap((gsap) => {
       const trigger = { trigger: sectionRef.current, start: 'top 85%', once: true }
       gsap.from('.foot-cta',    { opacity: 0, y: 30, duration: 0.8, ease: 'power3.out',             scrollTrigger: trigger })
       gsap.from('.foot-links',  { opacity: 0, y: 20, duration: 0.7, ease: 'power3.out', delay: 0.15, scrollTrigger: trigger })
       gsap.from('.foot-bottom', { opacity: 0, y: 12, duration: 0.6, ease: 'power3.out', delay: 0.28, scrollTrigger: trigger })
     }, sectionRef)
-    return () => ctx.revert()
   }, [])
 
   return (
@@ -264,7 +236,7 @@ export default function FooterSection() {
             {/* Logo */}
             <div className="flex items-center gap-2.5 mb-5">
               <img
-                src="/assets/logo-r.png"
+                src="/assets/logo-r-96.webp"
                 alt="Revolution505"
                 className="w-10 h-10 object-contain flex-shrink-0"
                 width="40"

@@ -75,18 +75,12 @@ function ProcesoHero() {
 
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
         <motion.span
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
           className="inline-block text-xs text-muted uppercase tracking-[0.3em] mb-6"
         >
           Proceso de Trabajo · Revolution505
         </motion.span>
 
         <motion.h1
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           className="text-5xl md:text-7xl font-display italic text-text-primary leading-[0.92] mb-6"
         >
           Del concepto{' '}
@@ -95,9 +89,6 @@ function ProcesoHero() {
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.38 }}
           className="text-sm md:text-base text-muted max-w-lg mx-auto mb-8 leading-relaxed"
         >
           Un proceso claro y transparente en 6 pasos. Tú siempre sabes en qué etapa estamos.
@@ -106,9 +97,6 @@ function ProcesoHero() {
 
         {/* Timeline pills */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.48 }}
           className="flex flex-wrap items-center justify-center gap-2 mb-8"
         >
           {STEPS.map(step => (
@@ -123,9 +111,6 @@ function ProcesoHero() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
           className="flex flex-wrap items-center justify-center gap-4"
         >
           <a
