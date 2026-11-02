@@ -84,3 +84,15 @@ Ver `ANALISIS_COMPETIDORES.md` para análisis completo. La landing page implemen
 - WhatsApp CTA en cada sección
 - SEO local (copy menciona Michoacán, La Piedad, Morelia)
 - Copy persuasivo basado en dolor del cliente
+
+## Deploy a Hostinger (revolution505.com)
+
+Solo con "OK deploy" de Christian. Dos caminos:
+
+1. **Plugin de Hostinger** (`hostinger@claude-plugins-official`, requiere autorizarlo en `/mcp`). Su deploy **borra toda la raíz del sitio** antes de extraer el zip:
+   - Respalda primero los archivos que solo viven en el servidor en `server-only/` (gitignored), sobre todo `server-only/api/lead.config.php` (SMTP del formulario). Nunca se commitean.
+   - `npm run build && npm run package:deploy` → `deploy/site.zip` (dist + server-only). Se niega a empaquetar si falta `lead.config.php`.
+   - Sube con la skill `hosting-deploy-static-site` y verifica con un texto que sí esté en el build (p. ej. "Revisa tu sitio").
+2. **FTP** (no borra nada): credenciales `HOSTINGER_FTP_*` en `.env.local`, `npm run deploy:ftp -- --dry-run` y luego `npm run deploy:ftp`. Respalda `index.html` y `.htaccess` remotos en `backups/`.
+
+Después de cualquier deploy: probar `/revisa-tu-sitio` en vivo y que el formulario de `/contacto` llegue a contacto@revolution505.com.

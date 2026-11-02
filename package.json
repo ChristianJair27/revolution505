@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "preview:php": "php -S 127.0.0.1:8899 -t dist scripts/php-router.php",
-    "test": "playwright test"
+    "test": "playwright test",
+    "package:deploy": "node scripts/package-deploy.mjs",
+    "deploy:ftp": "node scripts/deploy-ftp.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
