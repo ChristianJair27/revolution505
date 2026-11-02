@@ -16,6 +16,7 @@ import ContactoPage   from './pages/redesign/ContactoPage'
 import NotFoundPage   from './pages/redesign/NotFoundPage'
 import LandingPage    from './pages/redesign/LandingPage'
 import CasoPage       from './pages/redesign/CasoPage'
+import RevisaTuSitioPage from './pages/redesign/RevisaTuSitioPage'
 import { LANDINGS_ES, LANDINGS_EN } from './content/landings'
 import { CASOS }      from './content/casos'
 
@@ -81,6 +82,7 @@ export function AppRoutes() {
         <Route path="/precios"    element={<Shell><PreciosPage /></Shell>}     />
         <Route path="/proceso"    element={<Shell><ProcesoPag /></Shell>}      />
         <Route path="/contacto"   element={<Shell><ContactoPage /></Shell>}    />
+        <Route path="/revisa-tu-sitio" element={<Shell><RevisaTuSitioPage /></Shell>} />
 
         {/* Landings de servicio en español (src/content/landings.ts) */}
         {LANDINGS_ES.map(l => (

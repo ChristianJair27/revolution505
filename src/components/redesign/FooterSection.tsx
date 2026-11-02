@@ -30,6 +30,7 @@ const FOOTER_COLS = [
       { label: 'Precios',             href: '/precios',    isRoute: true  },
       { label: 'Proceso de Trabajo',  href: '/proceso',    isRoute: true  },
       { label: 'Contacto',            href: '/contacto',   isRoute: true  },
+      { label: 'Revisa tu sitio gratis', href: '/revisa-tu-sitio', isRoute: true },
       { label: 'Testimonios',         href: '/#testimonios', isRoute: false },
       { label: 'FAQ',                 href: '/proceso',    isRoute: true  },
     ],

@@ -90,6 +90,15 @@ export const routes: RouteMeta[] = [
     priority: 0.9,
     sources: ['src/pages/redesign/ContactoPage.tsx'],
   },
+  {
+    path: '/revisa-tu-sitio',
+    title: 'Revisa tu sitio web gratis',
+    description:
+      'Herramienta gratis: revisa en 30 segundos si tu página tiene el WhatsApp roto, sin https, mala vista en celular o sin título para Google. Recibe una auditoría completa sin costo.',
+    changefreq: 'monthly',
+    priority: 0.8,
+    sources: ['src/pages/redesign/RevisaTuSitioPage.tsx', 'public/api/check.php'],
+  },
 ]
 
 // Landings de servicio (ES con precios, EN sin precios) — contenido en src/content/landings.ts

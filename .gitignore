@@ -33,3 +33,6 @@ dist/api/lead.config.php
 # Playwright
 test-results
 playwright-report
+
+# Respaldos del deploy FTP
+backups/
