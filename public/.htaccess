@@ -7,6 +7,15 @@ ErrorDocument 404 /404.html
 
 RewriteEngine On
 
+# Los subdominios (formulario, prevent, scripts, postiz) viven dentro de public_html y heredan este
+# archivo: las reglas de abajo son solo para el dominio principal. Sin esto, / en un subdominio
+# redirige a /<carpeta> y da 404.
+RewriteCond %{HTTP_HOST} !^(www\.)?revolution505\.com$ [NC]
+RewriteRule ^ - [L]
+
+# Las mismas carpetas también se abren como revolution505.com/<carpeta>/: se sirven tal cual
+RewriteRule ^(formulario|prevent|scripts|postiz)(/|$) - [L]
+
 # /index.html → /   y   /precios.html → /precios   (evita URLs duplicadas)
 RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
 RewriteRule ^ / [R=301,L]
