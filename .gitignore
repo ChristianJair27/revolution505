@@ -37,6 +37,3 @@ playwright-report
 # Respaldos del deploy FTP
 backups/
 
-# Deploy con plugin de Hostinger: paquete generado y archivos que solo viven en el servidor (secretos)
-deploy/
-server-only/
