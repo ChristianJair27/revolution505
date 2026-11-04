@@ -11,8 +11,8 @@
     "preview": "vite preview",
     "preview:php": "php -S 127.0.0.1:8899 -t dist scripts/php-router.php",
     "test": "playwright test",
-    "package:deploy": "node scripts/package-deploy.mjs",
-    "deploy:ftp": "node scripts/deploy-ftp.mjs"
+    "deploy:ftp": "node scripts/deploy-ftp.mjs",
+    "deploy:tus": "node scripts/deploy-tus.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
