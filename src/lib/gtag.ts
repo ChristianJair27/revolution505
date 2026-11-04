@@ -71,6 +71,8 @@ function trackMeta(event: 'Contact' | 'Lead', params: EventParams): void {
   }
 }
 
+let _ga4FirstPageViewSent = false
+
 /**
  * Registra un page view en Google Ads y GA4.
  * Llamar desde App.tsx en cada cambio de `location.pathname`.
@@ -81,8 +83,10 @@ export function gtagPageView(path: string): void {
     page_title: document.title,
   }
   gtag('config', ADS_ID, pageParams)
-  // Evento explícito: un segundo 'config' encolado antes de que cargue gtag.js no envía page_view,
-  // así que GA4 perdía la primera página de cada visita.
+  // La medición mejorada de GA4 ya cuenta los cambios de ruta; lo único que no ve es la primera
+  // página, porque el 'config' inicial lleva send_page_view: false.
+  if (_ga4FirstPageViewSent) return
+  _ga4FirstPageViewSent = true
   gtag('event', 'page_view', {
     send_to: GA4_ID,
     page_location: window.location.href,
