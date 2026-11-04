@@ -51,7 +51,14 @@ function trackAdsConversion(conversion: AdsConversion, extra: EventParams = {}):
 }
 
 /** Meta Pixel PageView en cada cambio de ruta SPA (además del PageView inicial en index.html). */
+let _metaFirstPageViewSent = false
+
 export function trackSpaPageView(): void {
+  // La primera página ya la cuenta el fbq('track', 'PageView') de index.html
+  if (!_metaFirstPageViewSent) {
+    _metaFirstPageViewSent = true
+    return
+  }
   if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
     window.fbq('track', 'PageView')
   }
@@ -74,7 +81,14 @@ export function gtagPageView(path: string): void {
     page_title: document.title,
   }
   gtag('config', ADS_ID, pageParams)
-  gtag('config', GA4_ID, pageParams)
+  // Evento explícito: un segundo 'config' encolado antes de que cargue gtag.js no envía page_view,
+  // así que GA4 perdía la primera página de cada visita.
+  gtag('event', 'page_view', {
+    send_to: GA4_ID,
+    page_location: window.location.href,
+    page_path: path,
+    page_title: document.title,
+  })
 }
 
 /** Lead confirmado por el servidor (formulario de contacto). */
